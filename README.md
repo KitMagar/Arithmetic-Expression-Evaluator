@@ -1,8 +1,8 @@
 # Arithmetic-Expression-Evaluator
 
-'''
-Team: Kansas Instruments
-Team Members: Emma, Kit, Vrishank, Phoenix, Khang, Jake, Aiden
+
+Team: Kansas Instruments;
+Team Members: Emma, Kit, Vrishank, Phoenix, Khang, Jake, Aiden;
 Team Roles:
   Project Manager - Emma
   Quality Control - Kit
