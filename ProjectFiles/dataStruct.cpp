@@ -1,6 +1,6 @@
+//Phoenix Brehm
 #include <stdexcept>
 #include <iostream>
-#include <cmath>
 using namespace std;
 
 union nodeData{
@@ -11,7 +11,7 @@ union nodeData{
 struct Node{
     nodeData entry;
     Node *next; //next points to the address of another node
-    bool isChar; //used with the getValue method of linkedList, as well as could be useful to use ptr.isChar to determine what to do.
+    bool isChar; //used in conjunction with main and getEntry to find out if we are interacting with a character or a value.
 
     //Our constructor cases, if character or if value
     Node(char c){
@@ -38,7 +38,7 @@ class LinkedList{
     int getLength(){
         return length;
     }
-    double getEntry(int index){
+    Node getEntry(int index){ //The way we interact with the returned node is handled elsewhere.
         if(length == 0){
             cout << "List is empty\n";
         }else if(index >= length || index < 0){
@@ -48,18 +48,14 @@ class LinkedList{
         for(int i =0;i<index;i++){
             temp = temp->next; //temp will point at the next node in line
         }
-        if(temp->isChar){
-            cout << temp->entry.character << "\n";
-        }else{
-            return temp->entry.value;
-        }
+        return *temp;
     }
 
-    void insert(char c,int index){ //USED FOR Characters
+    void insert(char c,int index){ //used for characters
         Node *jumper = head;
         Node *insertVal = new Node(c);
         insertVal->next = nullptr;
-        if(index > length || index < 0){
+        if(index >= length || index < 0){
             throw out_of_range("Index out of bounds");
 
 
@@ -86,7 +82,7 @@ class LinkedList{
         }
     }
 
-    void insert(double v,int index){ //USED for values
+    void insert(double v,int index){ //USED For values
         Node *jumper = head;
         Node *insertVal = new Node(v);
         insertVal->next = nullptr;
@@ -116,12 +112,39 @@ class LinkedList{
             length = length + 1;
         }
     }
+
+    void remove(int index){
+        if(index >= length || index <0){
+            throw out_of_range("Index out of bounds");
+        }else if(index == 0){
+            head = head->next;
+            length = length -1;
+        }else{
+            Node *before = head;
+            for(int i=0;i<index-1;i++){
+                before = before->next;
+            }
+            Node *temp = before->next;
+            before->next = before->next->next;
+            delete temp; //removes node from memory
+            length = length -1;
+        }
+    }
+
+    ~LinkedList(){ //iterates from the back and then deletes nodes from memory via remove function
+        Node *current = head;
+        while(current != nullptr){
+            Node* nextnode = current->next;
+            delete current;
+            current = nextnode;
+        }
+        head = nullptr;
+        length = 0;
+    }
 };
 
 
 /* SAMPLE MAIN
-
-
 
 int main(){
     LinkedList list;
@@ -132,8 +155,13 @@ int main(){
     list.insert('+', 2);
 
     for(int i=0;i<list.getLength();i++){
-        if(!isnan(list.getEntry(i))){                       <-This line is used because of the return method for getEntry not being the most well done, if anybody does a better implementation that would be nice
-            cout << list.getEntry(i) << "\n";
+
+
+    //This is how we handle if linked list has characters or numbers
+        if(list.getEntry(i).isChar){ 
+            cout << list.getEntry(i).entry.character << "\n";
+        }else{
+            cout << list.getEntry(i).entry.value << "\n";
         }
     }
     while (true)
@@ -143,11 +171,12 @@ int main(){
     
     return 0;
 }
+
 */
 
-template <typename T>
 struct BinaryNode{
-    T entry;
+    nodeData entry;
+    bool isChar;
     BinaryNode *left;
     BinaryNode *right;
 };
