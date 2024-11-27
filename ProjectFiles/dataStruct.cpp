@@ -174,9 +174,44 @@ int main(){
 
 */
 
+
+
+
+
+
+/*
 struct BinaryNode{
-    nodeData entry;
+    LinkedList entry;
     bool isChar;
     BinaryNode *left;
     BinaryNode *right;
 };
+
+class BinaryTree{
+    private:
+        BinaryNode *root;
+    public:
+        BinaryTree(){
+            root = nullptr;
+        }
+        void add(LinkedList value, LinkedList valueFull, ){ //bool will be used to send values down
+            if(root = nullptr){
+                root = new BinaryNode();
+                root->entry=value;
+            }else{
+                rec_add(value)
+            }
+        }
+        void add(LinkedList subTree){
+
+        }
+
+//once we have a clean list, move right find lowest priority item.
+//next put that at root, place items in left and right subtree
+//next move into the left subtree, find the lowest priority item
+//perform until lst=size 1, then move down rst until rst=size 1
+//end recursion
+
+
+
+};*/

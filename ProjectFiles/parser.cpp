@@ -10,7 +10,7 @@ By post order the intention is to go as far down as possible, then once you have
 //TODO: Throw error to errorhandler when we find the doubling up of operators, except for cases of nested parenthesis (()), distibution ()(), ()Operator()
 //Checking parenthesis validity
 //Look through the linked list from right to left, finding the lowest precidence operator [ +-, */and distributive, ^, () ] then putting the operator at the root, and then the leftside of the expression on the left child and the right side of the expression into the right child, perform this operation until every item of the list is isolated, then return this new tree to the evaluator
-
+using namespace std;
 
 Parsed parser(LinkedList tokenized_list){
 
