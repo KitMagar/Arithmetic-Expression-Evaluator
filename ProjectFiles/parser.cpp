@@ -87,44 +87,53 @@ class Parser{
         //TODO: Create post order traversal
         //LowPriority needs to be worked on in order to get accurate results from it.
         int lowPriority(LinkedList list){//expects a clean list
-            //traverse through list right to left
-            bool ignore = false;
+            //traverse through list right to left, only look for pluses/minus outside of parenthesis, then go right to left only looking for multi/div, then right to left only looking for exp. After this is done that must mean list expression is inside a set of parenthesis, do this all again but drop the exterior parenthesis
+            int parenthDepth = 0;
             bool addSub = true;
             bool multDiv = false;
             bool exp = false;
             bool par = false;
-            while(list.getLength() >0){
-                for(int j;j<4;j++){
+            while(list.getLength() >1){
+                for(int j=0;j<4;j++){
                     for(int i=list.getLength()-1; i>=0;i--){
                         if(list.getEntry(i).isChar){
                             if(list.getEntry(i).character == ')' && !par){
-                                ignore = true;
+                                parenthDepth++;
                             }else if(list.getEntry(i).character == '('){
-                                ignore = false;
-                            }else if(!ignore){
+                                parenthDepth--;
+                            }else if(parenthDepth == 0){
                                 if(addSub && (list.getEntry(i).character == '+' || list.getEntry(i).character == '-')){
                                     return i;
                                 }else if(multDiv &&((list.getEntry(i).character == '*' || list.getEntry(i).character == '/'))){
                                     return i;
                                 }else if(exp && list.getEntry(i).character == '^'){
                                     return i;
-                                }else if(par && )
+                                }else if(par && list.getEntry(0).character == '(' && list.getEntry(list.getLength()-1).character == ')'){
+                                    list.remove(0);
+                                    list.remove(list.getLength()-1);
+                                    par = false;
+                                    addSub = true;
+                                }
                             }
                         }
                     }
-                switch (j){
-                case 0:
-                    addSub = false;
-                    multDiv = true;
-                    break;
-                case 1:
-                    multDiv = false;
-                    exp = true;
-                case 2:
-                    exp = false;
-                    par = true;
+                    switch (j){
+                    case 0:
+                        addSub = false;
+                        multDiv = true;
+                        break;
+                    case 1:
+                        multDiv = false;
+                        exp = true;
+                        break;
+                    case 2:
+                        exp = false;
+                        par = true;
+                        break;
+                    default:
+                        break;
 
-                }
+                    }
                 }
             }
 
