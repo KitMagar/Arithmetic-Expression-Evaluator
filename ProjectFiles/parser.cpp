@@ -25,37 +25,26 @@ struct BinaryNode{
 class Parser{
     private:
         BinaryNode *root;
-        int unseperatedElements;
     public:
         Parser(LinkedList entry){
-            root = nullptr;
             //TODO: clean(entry);
-            unseperatedElements = entry.getLength();
-            split(entry, lowPriority(entry));//current idea:
-                            //Upon creation we create while loop while unseperated elements >0; find low priority items
+            root = split(entry, lowPriority(entry));
+            rec_add(root);
         }
-        void add(LinkedList value, LinkedList leftTree, LinkedList rightTree){ //bool will be used to send values down
-
-        //INCOMPLETE
-            if(root = nullptr){
-                root = new BinaryNode();
-                root->entry = value;
-                BinaryNode *pointLeft = new BinaryNode();
-                pointLeft->entry = leftTree;
-                BinaryNode *pointRight = new BinaryNode();
-                pointRight->entry = rightTree;
-                root->left=pointLeft;
-                root->right=pointLeft;
-            }else{
-                rec_add(root);
+        void rec_add(BinaryNode *curNode){
+            if(curNode==nullptr){
+                return;
+            }
+            if(curNode->left != nullptr && curNode->left->entry.getLength() > 1){
+                curNode->left = split(curNode->left->entry, lowPriority(curNode->left->entry));
+                rec_add(curNode->left);
+            }
+            if(curNode->right != nullptr && curNode->right->entry.getLength() > 1){
+                curNode->right = split(curNode->right->entry, lowPriority(curNode->right->entry));
+                rec_add(curNode->right);
             }
         }
-        BinaryNode rec_add(BinaryNode *curNode){
-            if(curNode->left->entry.getLength() > 1){
-                split(curNode->left->entry, lowPriority(curNode->left->entry));
-            }
-        }
-        void split(LinkedList list, int index){;
+        BinaryNode* split(LinkedList list, int index){;
             LinkedList leftList;
             LinkedList rightList;
             LinkedList center;
@@ -74,8 +63,11 @@ class Parser{
                     rightList.insert(list.getEntry(index+i+1).value, i);
                 }
             }
-            unseperatedElements--;
-            add(center, leftList, rightList);
+            BinaryNode *newNode = new BinaryNode();
+            newNode->entry = center;
+            newNode->left->entry=leftList;
+            newNode->right->entry=rightList;
+            return newNode;
 
         }
         int lowPriority(LinkedList list){//expects a clean list
