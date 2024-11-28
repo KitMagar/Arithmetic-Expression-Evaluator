@@ -32,7 +32,7 @@ class Parser{
             rec_add(root);
         }
         void rec_add(BinaryNode *curNode){
-            if(curNode==nullptr){
+            if(curNode==nullptr){ //not quite sure if necessary, but it's a good to have for safety.
                 return;
             }
             if(curNode->left != nullptr && curNode->left->entry.getLength() > 1){
@@ -48,7 +48,11 @@ class Parser{
             LinkedList leftList;
             LinkedList rightList;
             LinkedList center;
+
+            //fills center value
             center.insert(list.getEntry(index).character, 0);
+
+            //fills center's lst
             for(int i=0; i<index;i++){
                 if(list.getEntry(i).isChar){
                     leftList.insert(list.getEntry(i).character,i);
@@ -56,6 +60,8 @@ class Parser{
                     leftList.insert(list.getEntry(i).value, i);
                 }
             }
+
+            //fills center's rst
             for(int i=0; i<list.getLength()-index-1;i++){
                 if(list.getEntry(index+i+1).isChar){
                     rightList.insert(list.getEntry(index+i+1).character,i);
@@ -63,6 +69,8 @@ class Parser{
                     rightList.insert(list.getEntry(index+i+1).value, i);
                 }
             }
+
+            //creates a node with the value of center and respective trees
             BinaryNode *newNode = new BinaryNode();
             newNode->entry = center;
             newNode->left->entry=leftList;
@@ -70,6 +78,14 @@ class Parser{
             return newNode;
 
         }
+
+
+
+        //TODO: Clean method which adds in implied multiplication as well as checks validity of expression
+        //TODO: Fix LowPriority
+        //TODO: Create deconstructor method
+        //TODO: Create post order traversal
+        //LowPriority needs to be worked on in order to get accurate results from it.
         int lowPriority(LinkedList list){//expects a clean list
             //traverse through list right to left
             bool ignore = false;
