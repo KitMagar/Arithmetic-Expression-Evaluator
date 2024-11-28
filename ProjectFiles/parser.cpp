@@ -1,3 +1,11 @@
+/*
+
+TO KIT
+Please go to line 142 to see what to do. Implementation of void clean() method
+
+*/
+
+
 //parser.cpp
 //Phoenix Brehm and Kit Magar
 
@@ -17,7 +25,6 @@ using namespace std;
 
 struct BinaryNode{
     LinkedList entry;
-    bool isChar;
     BinaryNode *left;
     BinaryNode *right;
 };
@@ -27,7 +34,7 @@ class Parser{
         BinaryNode *root;
     public:
         Parser(LinkedList entry){
-            //TODO: clean(entry);
+            clean(entry);
             root = split(entry, lowPriority(entry));
             rec_add(root);
         }
@@ -78,23 +85,16 @@ class Parser{
             return newNode;
 
         }
-
-
-
         //TODO: Clean method which adds in implied multiplication as well as checks validity of expression
-        //TODO: Fix LowPriority
-        //TODO: Create deconstructor method
-        //TODO: Create post order traversal
-        //LowPriority needs to be worked on in order to get accurate results from it.
-        int lowPriority(LinkedList list){//expects a clean list
+        int lowPriority(LinkedList list){//expects a cleaned list, one with only a valid mathematical expression inside
             //traverse through list right to left, only look for pluses/minus outside of parenthesis, then go right to left only looking for multi/div, then right to left only looking for exp. After this is done that must mean list expression is inside a set of parenthesis, do this all again but drop the exterior parenthesis
             int parenthDepth = 0;
             bool addSub = true;
             bool multDiv = false;
             bool exp = false;
             bool par = false;
-            while(list.getLength() >1){
-                for(int j=0;j<4;j++){
+            while(list.getLength() >1){//either we escape by only being left with a number, or by returning.
+                for(int j=0;j<4;j++){ //j<4 so we don't eliminate early, if j<3, we would switch case 2 but never acutally perform anything with the new case
                     for(int i=list.getLength()-1; i>=0;i--){
                         if(list.getEntry(i).isChar){
                             if(list.getEntry(i).character == ')' && !par){
@@ -136,12 +136,38 @@ class Parser{
                     }
                 }
             }
+            return 0; //this is the case that there is only one item remaining in the list typically it comes from examples like 3*(4), first pass * is returned, then (4) is handled parenthesis are removed, then we only have 4 in the list now 
 
         }
-};
+        void clean(LinkedList list){ //To Kit: Please implement this method. What is required is to check if the expression makes sytactical sense, as well as inserting in multiplication into the correct index of the list in cases where it is implied like (4+5)(9/3) or 6(7+9) also check for valid parenthesis (this can be achieved by doing something similar to parentDepth in lowPriority method) and then making sure there aren't any nonsensical expressions like 9+/9, the lexer guys will be giving us data in the form of a linked list in the form [6,+,-6] or [6,-,6]
+            ;
+        }
+        void postOrderDisplay(){
+            rec_postOrder(root);
+        }
+        void rec_postOrder(BinaryNode *curNode){
+            if(curNode->left != nullptr){
+                rec_postOrder(curNode->left);
+            }
+            if(curNode->right != nullptr){
+                rec_postOrder(curNode->right);
+            }
+            if(curNode->entry.getEntry(0).isChar){
+                cout << curNode->entry.getEntry(0).character << "\n";
+            }else{
+                cout << curNode->entry.getEntry(0).value << "\n";
+            }
+        }
+        ~Parser(){
+            deleteTree(root);
+        }
+        void deleteTree(BinaryNode *curNode){
+            if(curNode == nullptr){
+                return;
+            }
+            deleteTree(curNode->left);
+            deleteTree(curNode->right);
+            delete curNode;
+        }
 
-//once we have a clean list, move right find lowest priority item.
-//next put that at root, place items in left and right subtree
-//next move into the left subtree, find the lowest priority item
-//perform until lst=size 1, then move down rst until rst=size 1
-//end recursion
+};
