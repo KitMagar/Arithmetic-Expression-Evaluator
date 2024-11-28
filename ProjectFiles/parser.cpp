@@ -10,8 +10,121 @@ By post order the intention is to go as far down as possible, then once you have
 //TODO: Throw error to errorhandler when we find the doubling up of operators, except for cases of nested parenthesis (()), distibution ()(), ()Operator()
 //Checking parenthesis validity
 //Look through the linked list from right to left, finding the lowest precidence operator [ +-, */and distributive, ^, () ] then putting the operator at the root, and then the leftside of the expression on the left child and the right side of the expression into the right child, perform this operation until every item of the list is isolated, then return this new tree to the evaluator
+#include "dataStruct.h"
+#include <stdexcept>
+
 using namespace std;
 
-Parsed parser(LinkedList tokenized_list){
+struct BinaryNode{
+    LinkedList entry;
+    bool isChar;
+    BinaryNode *left;
+    BinaryNode *right;
+};
 
-}
+class Parser{
+    private:
+        BinaryNode *root;
+        int unseperatedElements;
+    public:
+        Parser(LinkedList entry){
+            root = nullptr;
+            //TODO: clean(entry);
+            unseperatedElements = entry.getLength();
+            split(entry, lowPriority(entry));//current idea:
+                            //Upon creation we create while loop while unseperated elements >0; find low priority items
+        }
+        void add(LinkedList value, LinkedList leftTree, LinkedList rightTree){ //bool will be used to send values down
+
+        //INCOMPLETE
+            if(root = nullptr){
+                root = new BinaryNode();
+                root->entry = value;
+                BinaryNode *pointLeft = new BinaryNode();
+                pointLeft->entry = leftTree;
+                BinaryNode *pointRight = new BinaryNode();
+                pointRight->entry = rightTree;
+                root->left=pointLeft;
+                root->right=pointLeft;
+            }else{
+                rec_add(root);
+            }
+        }
+        BinaryNode rec_add(BinaryNode *curNode){
+            if(curNode->left->entry.getLength() > 1){
+                split(curNode->left->entry, lowPriority(curNode->left->entry));
+            }
+        }
+        void split(LinkedList list, int index){;
+            LinkedList leftList;
+            LinkedList rightList;
+            LinkedList center;
+            center.insert(list.getEntry(index).character, 0);
+            for(int i=0; i<index;i++){
+                if(list.getEntry(i).isChar){
+                    leftList.insert(list.getEntry(i).character,i);
+                }else{
+                    leftList.insert(list.getEntry(i).value, i);
+                }
+            }
+            for(int i=0; i<list.getLength()-index-1;i++){
+                if(list.getEntry(index+i+1).isChar){
+                    rightList.insert(list.getEntry(index+i+1).character,i);
+                }else{
+                    rightList.insert(list.getEntry(index+i+1).value, i);
+                }
+            }
+            unseperatedElements--;
+            add(center, leftList, rightList);
+
+        }
+        int lowPriority(LinkedList list){//expects a clean list
+            //traverse through list right to left
+            bool ignore = false;
+            bool addSub = true;
+            bool multDiv = false;
+            bool exp = false;
+            bool par = false;
+            while(list.getLength() >0){
+                for(int j;j<4;j++){
+                    for(int i=list.getLength()-1; i>=0;i--){
+                        if(list.getEntry(i).isChar){
+                            if(list.getEntry(i).character == ')' && !par){
+                                ignore = true;
+                            }else if(list.getEntry(i).character == '('){
+                                ignore = false;
+                            }else if(!ignore){
+                                if(addSub && (list.getEntry(i).character == '+' || list.getEntry(i).character == '-')){
+                                    return i;
+                                }else if(multDiv &&((list.getEntry(i).character == '*' || list.getEntry(i).character == '/'))){
+                                    return i;
+                                }else if(exp && list.getEntry(i).character == '^'){
+                                    return i;
+                                }else if(par && )
+                            }
+                        }
+                    }
+                switch (j){
+                case 0:
+                    addSub = false;
+                    multDiv = true;
+                    break;
+                case 1:
+                    multDiv = false;
+                    exp = true;
+                case 2:
+                    exp = false;
+                    par = true;
+
+                }
+                }
+            }
+
+        }
+};
+
+//once we have a clean list, move right find lowest priority item.
+//next put that at root, place items in left and right subtree
+//next move into the left subtree, find the lowest priority item
+//perform until lst=size 1, then move down rst until rst=size 1
+//end recursion
