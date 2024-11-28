@@ -20,7 +20,8 @@ By post order the intention is to go as far down as possible, then once you have
 //Look through the linked list from right to left, finding the lowest precidence operator [ +-, */and distributive, ^, () ] then putting the operator at the root, and then the leftside of the expression on the left child and the right side of the expression into the right child, perform this operation until every item of the list is isolated, then return this new tree to the evaluator
 #include "dataStruct.h"
 #include <stdexcept>
-
+#include <iostream>
+#include "parser.h"
 using namespace std;
 
 struct BinaryNode{
@@ -32,12 +33,6 @@ struct BinaryNode{
 class Parser{
     private:
         BinaryNode *root;
-    public:
-        Parser(LinkedList entry){
-            clean(entry);
-            root = split(entry, lowPriority(entry));
-            rec_add(root);
-        }
         void rec_add(BinaryNode *curNode){
             if(curNode==nullptr){ //not quite sure if necessary, but it's a good to have for safety.
                 return;
@@ -142,8 +137,13 @@ class Parser{
         void clean(LinkedList list){ //To Kit: Please implement this method. What is required is to check if the expression makes sytactical sense, as well as inserting in multiplication into the correct index of the list in cases where it is implied like (4+5)(9/3) or 6(7+9) also check for valid parenthesis (this can be achieved by doing something similar to parentDepth in lowPriority method) and then making sure there aren't any nonsensical expressions like 9+/9, the lexer guys will be giving us data in the form of a linked list in the form [6,+,-6] or [6,-,6]
             ;
         }
-        void postOrderDisplay(){
-            rec_postOrder(root);
+        void deleteTree(BinaryNode *curNode){
+            if(curNode == nullptr){
+                return;
+            }
+            deleteTree(curNode->left);
+            deleteTree(curNode->right);
+            delete curNode;
         }
         void rec_postOrder(BinaryNode *curNode){
             if(curNode->left != nullptr){
@@ -158,16 +158,16 @@ class Parser{
                 cout << curNode->entry.getEntry(0).value << "\n";
             }
         }
+    public:
+        Parser(LinkedList entry){
+            clean(entry);
+            root = split(entry, lowPriority(entry));
+            rec_add(root);
+        }
+        void postOrderDisplay(){
+            rec_postOrder(root);
+        }
         ~Parser(){
             deleteTree(root);
         }
-        void deleteTree(BinaryNode *curNode){
-            if(curNode == nullptr){
-                return;
-            }
-            deleteTree(curNode->left);
-            deleteTree(curNode->right);
-            delete curNode;
-        }
-
 };
