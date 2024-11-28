@@ -1,7 +1,7 @@
 /*
 
 TO KIT
-Please go to line 142 to see what to do. Implementation of void clean() method
+Please go to line 137 to see what to do. Implementation of void clean() method
 If you need any clarification on documentation feel free to text me - Phoenix (913-258-0706).
 */
 
