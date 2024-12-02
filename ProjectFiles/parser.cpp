@@ -1,11 +1,3 @@
-/*
-
-TO KIT
-Please go to line 137 to see what to do. Implementation of void clean() method
-If you need any clarification on documentation feel free to text me - Phoenix (913-258-0706).
-*/
-
-
 //parser.cpp
 //Phoenix Brehm and Kit Magar
 
@@ -46,7 +38,7 @@ class Parser{
                 rec_add(curNode->right);
             }
         }
-        BinaryNode* split(LinkedList list, int index){;
+        BinaryNode* split(LinkedList list, int index){
             LinkedList leftList;
             LinkedList rightList;
             LinkedList center;
@@ -80,7 +72,6 @@ class Parser{
             return newNode;
 
         }
-        //TODO: Clean method which adds in implied multiplication as well as checks validity of expression
         int lowPriority(LinkedList list){//expects a cleaned list, one with only a valid mathematical expression inside
             //traverse through list right to left, only look for pluses/minus outside of parenthesis, then go right to left only looking for multi/div, then right to left only looking for exp. After this is done that must mean list expression is inside a set of parenthesis, do this all again but drop the exterior parenthesis
             int parenthDepth = 0;
@@ -158,7 +149,7 @@ class Parser{
                 }
             
                     // This will check for operators and their valid placements
-                if (current.isChar && (current.character == '+' || current.character == '-' || current.character == '*' || current.character == '/')) {
+                if (current.isChar && (current.character == '+' || current.character == '-' || current.character == '*' || current.character == '/' || current.character == '^')) {
                     if (lastWasOperator) {
                         throw runtime_error("Error: Consecutive operators are not allowed.");
                     }
@@ -193,27 +184,27 @@ class Parser{
                 throw runtime_error("Error: Expression ends with an invalid operator.");
             }
                 }
-                void deleteTree(BinaryNode *curNode){
-                    if(curNode == nullptr){
-                        return;
-                    }
-                    deleteTree(curNode->left);
-                    deleteTree(curNode->right);
-                    delete curNode;
-                }
-                void rec_postOrder(BinaryNode *curNode){
-                    if(curNode->left != nullptr){
-                        rec_postOrder(curNode->left);
-                    }
-                    if(curNode->right != nullptr){
-                        rec_postOrder(curNode->right);
-                    }
-                    if(curNode->entry.getEntry(0).isChar){
-                        cout << curNode->entry.getEntry(0).character << "\n";
-                    }else{
-                        cout << curNode->entry.getEntry(0).value << "\n";
-                    }
-                }
+        void deleteTree(BinaryNode *curNode){
+            if(curNode == nullptr){
+                return;
+            }
+            deleteTree(curNode->left);
+            deleteTree(curNode->right);
+            delete curNode;
+        }
+        void rec_postOrder(BinaryNode *curNode){
+            if(curNode->left != nullptr){
+                rec_postOrder(curNode->left);
+            }
+            if(curNode->right != nullptr){
+                rec_postOrder(curNode->right);
+            }
+            if(curNode->entry.getEntry(0).isChar){
+                cout << curNode->entry.getEntry(0).character << "\n";
+            }else{
+                cout << curNode->entry.getEntry(0).value << "\n";
+            }
+        }
     public:
         Parser(LinkedList entry){
             clean(entry);
