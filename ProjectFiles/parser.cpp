@@ -134,30 +134,86 @@ class Parser{
             return 0; //this is the case that there is only one item remaining in the list typically it comes from examples like 3*(4), first pass * is returned, then (4) is handled parenthesis are removed, then we only have 4 in the list now 
 
         }
-        void clean(LinkedList list){ //To Kit: Please implement this method. What is required is to check if the expression makes sytactical sense, as well as inserting in multiplication into the correct index of the list in cases where it is implied like (4+5)(9/3) or 6(7+9) also check for valid parenthesis (this can be achieved by doing something similar to parentDepth in lowPriority method) and then making sure there aren't any nonsensical expressions like 9+/9, the lexer guys will be giving us data in the form of a linked list in the form [6,+,-6] or [6,-,6]
-            ;
+        void clean(LinkedList list){
+            //To Kit: Please implement this method. What is required is to check if the expression makes sytactical sense, as well as inserting in multiplication into the correct index of the list in cases where it is implied like (4+5)(9/3) or 6(7+9) also check for valid parenthesis (this can be achieved by doing something similar to parentDepth in lowPriority method) and then making sure there aren't any nonsensical expressions like 9+/9, the lexer guys will be giving us data in the form of a linked list in the form [6,+,-6] or [6,-,6]
+            int parenthDepth = 0;
+            bool lastWasOperator = false;
+            bool lastWasValue = false;
+            
+            for (int i = 0; i < list.getLength(); i++) {
+                auto current = list.getEntry(i);
+            
+                    // This gonna check for valid parentheses
+                if (current.isChar && current.character == '(') {
+                    parenthDepth++;
+                    lastWasOperator = true; // Opening parentheses acts as an implicit operator
+                    lastWasValue = false;
+                } else if (current.isChar && current.character == ')') {
+                    parenthDepth--;
+                    if (parenthDepth < 0) {
+                        throw runtime_error("Error: Mismatched parentheses detected.");
+                    }
+                    lastWasOperator = false;
+                    lastWasValue = true;
+                }
+            
+                    // This will check for operators and their valid placements
+                if (current.isChar && (current.character == '+' || current.character == '-' || current.character == '*' || current.character == '/')) {
+                    if (lastWasOperator) {
+                        throw runtime_error("Error: Consecutive operators are not allowed.");
+                    }
+                    lastWasOperator = true;
+                    lastWasValue = false;
+                } else if (!current.isChar) { 
+                    if (lastWasValue) {
+                        list.insert('*', i);
+                        i++; 
+                    }
+                    lastWasOperator = false;
+                    lastWasValue = true;
+    }
+
+        //  this handles implied multiplication after closing parentheses
+            if (current.isChar && current.character == ')' && i + 1 < list.getLength()) {
+                auto next = list.getEntry(i + 1);
+                if (!next.isChar || next.character == '(') {
+                    list.insert('*', i + 1);
+                    i++; // Skip over newly inserted operator
+                }
+            }
         }
-        void deleteTree(BinaryNode *curNode){
-            if(curNode == nullptr){
-                return;
+    
+        // Final check for mismatched parentheses
+            if (parenthDepth != 0) {
+                throw runtime_error("Error: Mismatched parentheses detected.");
             }
-            deleteTree(curNode->left);
-            deleteTree(curNode->right);
-            delete curNode;
-        }
-        void rec_postOrder(BinaryNode *curNode){
-            if(curNode->left != nullptr){
-                rec_postOrder(curNode->left);
+        
+            // this will check for invalid ending 
+            if (lastWasOperator) {
+                throw runtime_error("Error: Expression ends with an invalid operator.");
             }
-            if(curNode->right != nullptr){
-                rec_postOrder(curNode->right);
-            }
-            if(curNode->entry.getEntry(0).isChar){
-                cout << curNode->entry.getEntry(0).character << "\n";
-            }else{
-                cout << curNode->entry.getEntry(0).value << "\n";
-            }
-        }
+                }
+                void deleteTree(BinaryNode *curNode){
+                    if(curNode == nullptr){
+                        return;
+                    }
+                    deleteTree(curNode->left);
+                    deleteTree(curNode->right);
+                    delete curNode;
+                }
+                void rec_postOrder(BinaryNode *curNode){
+                    if(curNode->left != nullptr){
+                        rec_postOrder(curNode->left);
+                    }
+                    if(curNode->right != nullptr){
+                        rec_postOrder(curNode->right);
+                    }
+                    if(curNode->entry.getEntry(0).isChar){
+                        cout << curNode->entry.getEntry(0).character << "\n";
+                    }else{
+                        cout << curNode->entry.getEntry(0).value << "\n";
+                    }
+                }
     public:
         Parser(LinkedList entry){
             clean(entry);
