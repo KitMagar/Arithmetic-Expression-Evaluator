@@ -4,6 +4,7 @@
 #include <iostream>
 #include <stdexcept>
 #include "dataStruct.h"
+#include "errorhandler.h"
 
 struct BinaryNode{
     LinkedList entry;

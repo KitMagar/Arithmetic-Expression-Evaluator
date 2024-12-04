@@ -14,6 +14,7 @@ By post order the intention is to go as far down as possible, then once you have
 #include <stdexcept>
 #include <iostream>
 #include "parser.h"
+#include "errorhandler.h"
 using namespace std;
 
 struct BinaryNode{
@@ -21,6 +22,8 @@ struct BinaryNode{
     BinaryNode *left;
     BinaryNode *right;
 };
+
+ErrorHandler errorH;
 
 class Parser{
     private:
@@ -142,7 +145,7 @@ class Parser{
                 } else if (current.isChar && current.character == ')') {
                     parenthDepth--;
                     if (parenthDepth < 0) {
-                        throw runtime_error("Error: Mismatched parentheses detected.");
+                        errorH.mismatchedParenthesesError();
                     }
                     lastWasOperator = false;
                     lastWasValue = true;
@@ -151,7 +154,7 @@ class Parser{
                     // This will check for operators and their valid placements
                 if (current.isChar && (current.character == '+' || current.character == '-' || current.character == '*' || current.character == '/' || current.character == '^')) {
                     if (lastWasOperator) {
-                        throw runtime_error("Error: Consecutive operators are not allowed.");
+                        errorH.invalidOperatorSequenceError();
                     }
                     lastWasOperator = true;
                     lastWasValue = false;
@@ -162,28 +165,28 @@ class Parser{
                     }
                     lastWasOperator = false;
                     lastWasValue = true;
-    }
+                }
 
         //  this handles implied multiplication after closing parentheses
-            if (current.isChar && current.character == ')' && i + 1 < list.getLength()) {
-                auto next = list.getEntry(i + 1);
-                if (!next.isChar || next.character == '(') {
-                    list.insert('*', i + 1);
-                    i++; // Skip over newly inserted operator
+                if (current.isChar && current.character == ')' && i + 1 < list.getLength()) {
+                    auto next = list.getEntry(i + 1);
+                    if (!next.isChar || next.character == '(') {
+                       list.insert('*', i + 1);
+                      i++; // Skip over newly inserted operator
+                    }
                 }
             }
-        }
     
         // Final check for mismatched parentheses
             if (parenthDepth != 0) {
-                throw runtime_error("Error: Mismatched parentheses detected.");
+                errorH.mismatchedParenthesesError();
             }
         
             // this will check for invalid ending 
             if (lastWasOperator) {
-                throw runtime_error("Error: Expression ends with an invalid operator.");
+                errorH.invalidOperatorSequenceError();
             }
-                }
+        }
         void deleteTree(BinaryNode *curNode){
             if(curNode == nullptr){
                 return;
