@@ -126,23 +126,3 @@ string tokenTypeToString(TokenType type) {
     }
     return 0;
 }
-
-int main() {
-    string expression;
-    cout << "Enter arithmetic expression:\n";
-    getline(cin, expression);
-    Lexer lexer(expression);
-
-    vector<Token> tokens = lexer.tokenize();
-
-    for (const auto& token : tokens) {
-        if (token.value != "") {
-            cout << "Token: " << tokenTypeToString(token.type) << ", " << token.value << endl;
-        }
-        else {
-            cout << "Token: " << tokenTypeToString(token.type) << endl;
-        }
-    }
-
-    return 0;
-}
