@@ -2,26 +2,22 @@
 #define ERRORHANDLER_H
 
 #include <string>
-#include <vector>
 
 class ErrorHandler {
 private:
-    std::vector<std::string> errorMessages; // Stores all error messages
+    static const int MAX_ERRORS = 100; 
+    std::string errorMessages[MAX_ERRORS]; 
+    int errorCount; 
 
 public:
-    // Adds a new error message to the list
-    void logError(const std::string& message);
+    ErrorHandler(); // Constructor to initialize the error handler
 
-    // Returns true if there are errors
-    bool hasErrors() const;
+    void logError(const std::string& message); // Add a new error message
+    bool hasErrors() const; // Check if errors are present
+    void displayErrors() const; // Print all error messages to the console
+    void clearErrors(); // Clear all logged errors
 
-    // Prints all error messages to the console
-    void displayErrors() const;
-
-    // Clears all logged errors
-    void clearErrors();
-
-    // Specific error handling functions
+    
     void unmatchedParenthesesError();
     void operatorWithoutOperandsError(const std::string& operatorSymbol, int position);
     void incorrectOperatorUsageError();
@@ -34,4 +30,4 @@ public:
     void invalidCharactersError(const std::string& characterSequence, int position);
 };
 
-#endif // ERRORHANDLER_H
+#endif 
