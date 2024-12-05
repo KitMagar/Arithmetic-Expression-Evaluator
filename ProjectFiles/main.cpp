@@ -21,6 +21,7 @@ int main(){
         Parser parsed(lex.tokenize());
         Evaluator evaluated(parsed);
         cout << evaluated.evaluate();
+        // 💣🔥💥
         lex.~Lexer();
         parsed.~Parser();
         evaluated.~Evaluator();
