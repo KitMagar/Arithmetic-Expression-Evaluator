@@ -12,6 +12,12 @@ int main(){
     while(!quit){
         cout << "What is your input: \n";
         cin >> userInput;
-        
+        Lexer lex(userInput);
+        Parser parsed(lex.tokenize());
+        Evaluator evaluated(parsed);
+        cout << evaluated.evaluate();
+        ~lex();
+        ~parsed();
+        ~evaluated();
     }
 }
