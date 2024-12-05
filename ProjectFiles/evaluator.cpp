@@ -40,7 +40,7 @@ class Evaluator {
 					errorH.incorrectOperatorUsageError(); //Invalid Operand Error
 					throw runtime_error("Invalid operand");
 				}
-				return entry.value;
+				return entry.entry.value;
 			}
 
 			// Evaluate left and right subtrees
@@ -48,7 +48,7 @@ class Evaluator {
 			double rightValue = evaluateNode(node->right);
 
 			// Get the operator
-			char op = node->entry.getEntry(0).character;
+			char op = node->entry.getEntry(0).entry.character;
 
 			// HERE WE DETERMINE WHAT OPERATION IS EXECUTED
 			switch (op) {

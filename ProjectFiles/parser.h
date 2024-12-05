@@ -1,8 +1,6 @@
 #ifndef PARSER_H
 #define PARSER_H
 
-#include <iostream>
-#include <stdexcept>
 #include "dataStruct.h"
 #include "errorhandler.h"
 
@@ -11,9 +9,9 @@ struct BinaryNode{
     BinaryNode *left;
     BinaryNode *right;
 };
-
 class Parser{
     private:
+        ErrorHandler errorH;
         void rec_add(BinaryNode *curNode);
         BinaryNode* split(LinkedList list, int index);
         int lowPriority(LinkedList list);

@@ -1,9 +1,5 @@
 #ifndef LINKEDLIST_H
 #define LINKEDLIST_H
-
-#include <stdexcept>
-#include <iostream>
-
 union nodeData{
     char character;
     double value;

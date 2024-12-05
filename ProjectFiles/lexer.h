@@ -1,10 +1,9 @@
 #ifndef LEXER_H
 #define LEXER_H
 
-#include <iostream>
-#include <string>
-#include <cctype>
 #include "dataStruct.h"
+#include <string>
+using namespace std;
 
 class Lexer {
     public:

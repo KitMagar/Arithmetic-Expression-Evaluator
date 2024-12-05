@@ -13,7 +13,6 @@ By post order the intention is to go as far down as possible, then once you have
 #include "dataStruct.h"
 #include <stdexcept>
 #include <iostream>
-#include "parser.h"
 #include "errorhandler.h"
 using namespace std;
 
@@ -23,10 +22,9 @@ struct BinaryNode{
     BinaryNode *right;
 };
 
-ErrorHandler errorH;
-
 class Parser{
     private:
+        ErrorHandler errorH;
         void rec_add(BinaryNode *curNode){
             if(curNode==nullptr){ //not quite sure if necessary, but it's a good to have for safety.
                 return;
@@ -46,23 +44,23 @@ class Parser{
             LinkedList center;
 
             //fills center value
-            center.insert(list.getEntry(index).character, 0);
+            center.insert(list.getEntry(index).entry.character, 0);
 
             //fills center's lst
             for(int i=0; i<index;i++){
                 if(list.getEntry(i).isChar){
-                    leftList.insert(list.getEntry(i).character,i);
+                    leftList.insert(list.getEntry(i).entry.character,i);
                 }else{
-                    leftList.insert(list.getEntry(i).value, i);
+                    leftList.insert(list.getEntry(i).entry.value, i);
                 }
             }
 
             //fills center's rst
             for(int i=0; i<list.getLength()-index-1;i++){
                 if(list.getEntry(index+i+1).isChar){
-                    rightList.insert(list.getEntry(index+i+1).character,i);
+                    rightList.insert(list.getEntry(index+i+1).entry.character,i);
                 }else{
-                    rightList.insert(list.getEntry(index+i+1).value, i);
+                    rightList.insert(list.getEntry(index+i+1).entry.value, i);
                 }
             }
 
@@ -85,18 +83,18 @@ class Parser{
                 for(int j=0;j<4;j++){ //j<4 so we don't eliminate early, if j<3, we would switch case 2 but never acutally perform anything with the new case
                     for(int i=list.getLength()-1; i>=0;i--){
                         if(list.getEntry(i).isChar){
-                            if(list.getEntry(i).character == ')' && !par){
+                            if(list.getEntry(i).entry.character == ')' && !par){
                                 parenthDepth++;
-                            }else if(list.getEntry(i).character == '('){
+                            }else if(list.getEntry(i).entry.character == '('){
                                 parenthDepth--;
                             }else if(parenthDepth == 0){
-                                if(addSub && (list.getEntry(i).character == '+' || list.getEntry(i).character == '-')){
+                                if(addSub && (list.getEntry(i).entry.character == '+' || list.getEntry(i).entry.character == '-')){
                                     return i;
-                                }else if(multDiv &&((list.getEntry(i).character == '*' || list.getEntry(i).character == '/'))){
+                                }else if(multDiv &&((list.getEntry(i).entry.character == '*' || list.getEntry(i).entry.character == '/'))){
                                     return i;
-                                }else if(exp && list.getEntry(i).character == '^'){
+                                }else if(exp && list.getEntry(i).entry.character == '^'){
                                     return i;
-                                }else if(par && list.getEntry(0).character == '(' && list.getEntry(list.getLength()-1).character == ')'){
+                                }else if(par && list.getEntry(0).entry.character == '(' && list.getEntry(list.getLength()-1).entry.character == ')'){
                                     list.remove(0);
                                     list.remove(list.getLength()-1);
                                     par = false;
@@ -137,11 +135,11 @@ class Parser{
                 auto current = list.getEntry(i);
             
                     // This gonna check for valid parentheses
-                if (current.isChar && current.character == '(') {
+                if (current.isChar && current.entry.character == '(') {
                     parenthDepth++;
                     lastWasOperator = true; // Opening parentheses acts as an implicit operator
                     lastWasValue = false;
-                } else if (current.isChar && current.character == ')') {
+                } else if (current.isChar && current.entry.character == ')') {
                     parenthDepth--;
                     if (parenthDepth < 0) {
                         errorH.mismatchedParenthesesError();
@@ -151,7 +149,7 @@ class Parser{
                 }
             
                     // This will check for operators and their valid placements
-                if (current.isChar && (current.character == '+' || current.character == '-' || current.character == '*' || current.character == '/' || current.character == '^')) {
+                if (current.isChar && (current.entry.character == '+' || current.entry.character == '-' || current.entry.character == '*' || current.entry.character == '/' || current.entry.character == '^')) {
                     if (lastWasOperator) {
                         errorH.invalidOperatorSequenceError();
                     }
@@ -167,9 +165,9 @@ class Parser{
                 }
 
         //  this handles implied multiplication after closing parentheses
-                if (current.isChar && current.character == ')' && i + 1 < list.getLength()) {
+                if (current.isChar && current.entry.character == ')' && i + 1 < list.getLength()) {
                     auto next = list.getEntry(i + 1);
-                    if (!next.isChar || next.character == '(') {
+                    if (!next.isChar || next.entry.character == '(') {
                        list.insert('*', i + 1);
                       i++; // Skip over newly inserted operator
                     }
@@ -202,9 +200,9 @@ class Parser{
                 rec_postOrder(curNode->right);
             }
             if(curNode->entry.getEntry(0).isChar){
-                cout << curNode->entry.getEntry(0).character << "\n";
+                cout << curNode->entry.getEntry(0).entry.character << "\n";
             }else{
-                cout << curNode->entry.getEntry(0).value << "\n";
+                cout << curNode->entry.getEntry(0).entry.value << "\n";
             }
         }
     public:

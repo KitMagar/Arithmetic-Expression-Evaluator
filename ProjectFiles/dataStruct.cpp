@@ -1,7 +1,6 @@
 //Phoenix Brehm
 #include <stdexcept>
 #include <iostream>
-#include "dataStruct.h"
 using namespace std;
 
 union nodeData{
