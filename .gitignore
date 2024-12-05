@@ -1,2 +1,6 @@
 # VSCODE Generated Files can be ignored
 .vscode/
+
+#MAKEFILE for compilation
+Makefile
+
