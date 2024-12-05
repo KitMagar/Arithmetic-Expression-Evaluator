@@ -3,6 +3,7 @@
 #include "lexer.h"
 #include "parser.h"
 #include "evaluator.h"
+#include "main.h"
 using namespace std;
 
 int main(){
