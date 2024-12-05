@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 #include <cctype>
-#Include "dataStruct.h"
+#include "dataStruct.h"
 
 using namespace std;
 
