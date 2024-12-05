@@ -12,7 +12,7 @@ private:
     double evaluateNode(BinaryNode *node);
 
 public:
-    Evaluator(BinaryNode *rootNode);
+    Evaluator(Parser rootNode);
     double evaluate();
 	virtual ~Evaluator();
 };

@@ -16,9 +16,6 @@
 
 using namespace std;
 
-// Assuming BinaryNode structure is accessible
-// If not, move the BinaryNode definition to a shared header file
-
 class Evaluator {
 	
 	// UNDER THE HOOD 🚗
@@ -53,31 +50,40 @@ class Evaluator {
 			// Get the operator
 			char op = node->entry.getEntry(0).character;
 
-			// Perform the operation
+			// HERE WE DETERMINE WHAT OPERATION IS EXECUTED
 			switch (op) {
+				// Addition
 				case '+':
 					return leftValue + rightValue;
+				// Subtraction
 				case '-':
 					return leftValue - rightValue;
+				// Multiplication
 				case '*':
 					return leftValue * rightValue;
+				// Division
 				case '/':
+					// Ensure DIVBY0 is handled properly
 					if (rightValue == 0) {
 						errorH.divisionByZeroError();
-						throw runtime_error("Division by zero");
+						throw runtime_error("Division by zero"); // NEEDS TO BE CHANGED AT SOME POINT MAYBE
 					}
 					return leftValue / rightValue;
+				// Modulus
 				case '%':
+					// Ensure DIVBY0 is handled properly
 					if (rightValue == 0) {
 						errorH.divisionByZeroError();
-						throw runtime_error("Division by zero");
+						throw runtime_error("Division by zero"); // NEEDS TO BE CHANGED AT SOME POINT MAYBE
 					}
 					return fmod(leftValue, rightValue);
+				// Exponent
 				case '^':
 					return pow(leftValue, rightValue);
+				// If none of the above we throw an error
 				default:
 					errorH.incorrectOperatorUsageError();
-					throw runtime_error("Unknown operator");
+					throw runtime_error("Unknown operator"); // NEEDS TO BE CHANGED AT SOME POINT MAYBE
 			}
 		}
 
@@ -92,38 +98,15 @@ class Evaluator {
 
 	// WHAT Y'ALL CAN LOOK AT 😀
 	public:
-		Evaluator(BinaryNode *rootNode) : root(rootNode) {} //Change parameter to parser class, parser root has been made public so you can access it directly.
-
+		// PUBLIC CONSTRUCTOR METHOD
+		Evaluator(Parser rootNode) : root(rootNode.root) {}
 		double evaluate() {
 			return evaluateNode(root);
 		}
 
+		// PUBLIC DECONSTRUCTOR METHOD
 		virtual ~Evaluator() {
 			deleteTree(root);
 			root = nullptr;
 		}
 };
-
-// Usage example (to be adapted based on actual implementation)
-
-/*
-int main() {
-	// Assume parser has been used to build the expression tree
-	Parser parser(inputLinkedList);
-	BinaryNode *expressionTreeRoot = parser.getRoot();
-
-	Evaluator evaluator(expressionTreeRoot);
-	try {
-		double result = evaluator.evaluate();
-		cout << "The result is: " << result << endl;
-	} catch (const runtime_error &e) {
-		cout << "Evaluation error: " << e.what() << endl;
-	}
-
-	return 0;
-}
-*/
-
-
-
-// Add a deconstructor
