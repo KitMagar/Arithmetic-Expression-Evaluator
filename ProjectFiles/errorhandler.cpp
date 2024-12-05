@@ -12,10 +12,6 @@ void ErrorHandler::logError(const std::string& message) {
     }
 }
 
-bool ErrorHandler::hasErrors() const {
-    return errorCount > 0;
-}
-
 void ErrorHandler::displayErrors() const {
     if (errorCount == 0) {
         std::cout << "No errors detected." << std::endl;
