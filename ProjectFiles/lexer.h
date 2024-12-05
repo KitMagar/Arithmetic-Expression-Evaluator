@@ -40,6 +40,4 @@ class Lexer {
         string parseConstant();
 };
 
-string tokenTypeToString(TokenType type);
-
 #endif
