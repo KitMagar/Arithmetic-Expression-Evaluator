@@ -1,35 +1,38 @@
 #include "errorhandler.h"
 #include <iostream>
+#include <string>
 
-// Adds a new error message to the list
+ErrorHandler::ErrorHandler() : errorCount(0) {}
+
 void ErrorHandler::logError(const std::string& message) {
-    errorMessages.push_back(message);
-}
-
-// Returns true if there are errors
-bool ErrorHandler::hasErrors() const {
-    return !errorMessages.empty();
-}
-
-// Prints all error messages to the console
-void ErrorHandler::displayErrors() const {
-    for (const std::string& message : errorMessages) {
-        std::cout << "Error: " << message << std::endl;
+    if (errorCount < MAX_ERRORS) {
+        errorMessages[errorCount++] = message;
+    } else {
+        std::cerr << "Error log overflow: Cannot log more errors." << std::endl;
     }
 }
 
-// Clears all logged errors
-void ErrorHandler::clearErrors() {
-    errorMessages.clear();
+void ErrorHandler::displayErrors() const {
+    if (errorCount == 0) {
+        std::cout << "No errors detected." << std::endl;
+        return;
+    }
+    for (int i = 0; i < errorCount; ++i) {
+        std::cout << "Error: " << errorMessages[i] << std::endl;
+    }
 }
 
-// Specific error handling functions
+void ErrorHandler::clearErrors() {
+    errorCount = 0;
+}
+
 void ErrorHandler::unmatchedParenthesesError() {
     logError("Unmatched parentheses detected. Check for missing opening or closing parentheses.");
 }
 
 void ErrorHandler::operatorWithoutOperandsError(const std::string& operatorSymbol, int position) {
-    logError("Operator '" + operatorSymbol + "' at position " + std::to_string(position) + " does not have valid operands.");
+    std::string error = "Operator '" + operatorSymbol + "' at position " + std::to_string(position) + " does not have valid operands.";
+    logError(error);
 }
 
 void ErrorHandler::incorrectOperatorUsageError() {
@@ -41,7 +44,8 @@ void ErrorHandler::missingOperatorError() {
 }
 
 void ErrorHandler::invalidCharacterError(char character, int position) {
-    logError("Invalid character '" + std::string(1, character) + "' at position " + std::to_string(position) + ".");
+    std::string error = "Invalid character '" + std::string(1, character) + "' at position " + std::to_string(position) + ".";
+    logError(error);
 }
 
 void ErrorHandler::mismatchedParenthesesError() {
@@ -61,5 +65,6 @@ void ErrorHandler::missingOperandError() {
 }
 
 void ErrorHandler::invalidCharactersError(const std::string& characterSequence, int position) {
-    logError("Invalid character sequence '" + characterSequence + "' starting at position " + std::to_string(position) + ".");
+    std::string error = "Invalid character sequence '" + characterSequence + "' starting at position " + std::to_string(position) + ".";
+    logError(error);
 }
