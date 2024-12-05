@@ -7,12 +7,12 @@
 union nodeData{
     char character;
     double value;
-    bool isChar;
 };
 
 struct Node{
     nodeData entry;
     Node *next;
+    bool isChar;
     Node(char c);
     Node(double v);
 };
@@ -26,7 +26,7 @@ public:
     LinkedList();
     ~LinkedList();
     int getLength();
-    nodeData getEntry(int index);
+    Node getEntry(int index);
     void insert(char c, int index);
     void insert(double v, int index);
     void remove(int index);
