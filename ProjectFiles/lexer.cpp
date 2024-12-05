@@ -98,31 +98,3 @@ class Lexer {
             return input.substr(start, pos - start);
         }
 };
-
-string tokenTypeToString(TokenType type) {
-    switch (type) {
-        case TokenType::Constant:
-            return "Constant";
-        case TokenType::LeftParen:
-            return "LeftParen";
-        case TokenType::RightParen:
-            return "RightParen";
-        case TokenType::Plus:
-            return "Plus";
-        case TokenType::Minus:
-            return "Minus";
-        case TokenType::Exponent:
-            return "Exponent";
-        case TokenType::Multiply:
-            return "Multiply";
-        case TokenType::Divide:
-            return "Divide";
-        case TokenType::Modulo:
-            return "Modulo";
-        case TokenType::End:
-            return "End";
-        case TokenType::Invalid:
-            return "Invalid";
-    }
-    return 0;
-}
