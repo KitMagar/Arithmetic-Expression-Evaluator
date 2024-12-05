@@ -1,6 +1,20 @@
 #ifndef EVALUATOR_H
 #define EVALUATOR_H
 
-// Put prototypes in here
+#include "dataStruct.h"
+#include "parser.h"
+#include "errorhandler.h"
+
+class Evaluator {
+private:
+    BinaryNode *root;
+    ErrorHandler errorH;
+    double evaluateNode(BinaryNode *node);
+
+public:
+    Evaluator(BinaryNode *rootNode);
+    double evaluate();
+	virtual ~Evaluator();
+};
 
 #endif

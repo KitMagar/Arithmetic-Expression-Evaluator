@@ -81,12 +81,26 @@ class Evaluator {
 			}
 		}
 
+		// DECONSTRUCTOR
+		void deleteTree(BinaryNode* node) {
+			if (node!= nullptr) {
+				deleteTree(node-> left);
+				deleteTree(node->right);
+				delete node;
+			}
+		}
+
 	// WHAT Y'ALL CAN LOOK AT 😀
 	public:
 		Evaluator(BinaryNode *rootNode) : root(rootNode) {}
 
 		double evaluate() {
 			return evaluateNode(root);
+		}
+
+		virtual ~Evaluator() {
+			deleteTree(root);
+			root = nullptr;
 		}
 };
 
