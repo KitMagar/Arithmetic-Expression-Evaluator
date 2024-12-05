@@ -92,7 +92,7 @@ class Evaluator {
 
 	// WHAT Y'ALL CAN LOOK AT 😀
 	public:
-		Evaluator(BinaryNode *rootNode) : root(rootNode) {}
+		Evaluator(BinaryNode *rootNode) : root(rootNode) {} //Change parameter to parser class, parser root has been made public so you can access it directly.
 
 		double evaluate() {
 			return evaluateNode(root);

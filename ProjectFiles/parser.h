@@ -14,7 +14,6 @@ struct BinaryNode{
 
 class Parser{
     private:
-        BinaryNode *root;
         void rec_add(BinaryNode *curNode);
         BinaryNode* split(LinkedList list, int index);
         int lowPriority(LinkedList list);
@@ -22,6 +21,7 @@ class Parser{
         void deleteTree(BinaryNode *curNode);
         void rec_postOrder(BinaryNode *curNode);
     public:
+        BinaryNode *root;
         Parser(LinkedList entry);
         void postOrderDisplay();
         ~Parser();

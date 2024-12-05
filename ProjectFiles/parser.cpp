@@ -27,7 +27,6 @@ ErrorHandler errorH;
 
 class Parser{
     private:
-        BinaryNode *root;
         void rec_add(BinaryNode *curNode){
             if(curNode==nullptr){ //not quite sure if necessary, but it's a good to have for safety.
                 return;
@@ -209,6 +208,7 @@ class Parser{
             }
         }
     public:
+        BinaryNode *root;
         Parser(LinkedList entry){
             clean(entry);
             root = split(entry, lowPriority(entry));
