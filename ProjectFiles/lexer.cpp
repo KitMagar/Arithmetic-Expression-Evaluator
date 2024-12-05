@@ -1,36 +1,15 @@
 #include <iostream>
 #include <string>
-#include <vector>
 #include <cctype>
+#include "dataStruct.h"
 
 using namespace std;
-
-enum class TokenType {
-    LeftParen,
-    RightParen,
-    Plus,
-    Minus,
-    Multiply,
-    Divide,
-    Modulo,
-    Exponent,
-    Constant,
-    Invalid,
-    End
-};
-
-struct Token {
-    TokenType type;
-    string value;
-
-    Token(TokenType type, string value = "") : type(type), value(value) {}
-};
 
 class Lexer {
     public:
         explicit Lexer(const string& input) : input(input), pos(0) {}
-        vector<Token> tokenize() {
-            vector<Token> tokens;
+        LinkedList tokenize() {
+            LinkedList tokens;
 
             while (pos < input.length()) {
                 char current = input[pos];
@@ -40,49 +19,53 @@ class Lexer {
                     continue;
                 }
                 else if (isdigit(current)) {
-                    tokens.push_back(Token(TokenType::Constant, parseConstant()));
+                    string constant = parseConstant();
+                    tokens.insert(stod(constant), pos);
+                    pos++;
                 }
                 else if (current == '(') {
-                    tokens.push_back(Token(TokenType::LeftParen));
+                    tokens.insert('(', pos);
                     pos++;
                 }
                 else if (current == ')') {
-                    tokens.push_back(Token(TokenType::RightParen));
+                    tokens.insert(')', pos);
                     pos++;
                 }
                 else if (current == '+') {
-                    tokens.push_back(Token(TokenType::Plus));
+                    tokens.insert('+', pos);
                     pos++;
                 }
                 else if (current == '-') {
-                    tokens.push_back(Token(TokenType::Minus));
+                    tokens.insert('-', pos);
                     pos++;
                 }
                 else if (current == '*') {
                     if (input[pos+1] == '*' && pos+1 < input.length()) {
-                        tokens.push_back(Token(TokenType::Exponent));
+                        tokens.insert('^', pos);
                         pos++;
                         pos++;
                     }
                     else {
-                        tokens.push_back(Token(TokenType::Multiply));
+                        tokens.insert('*', pos);
                         pos++;
                     }
                 }
                 else if (current == '/') {
-                    tokens.push_back(Token(TokenType::Divide));
+                    tokens.insert('/', pos);
                     pos++;
                 }
                 else if (current == '%') {
-                    tokens.push_back(Token(TokenType::Modulo));
+                    tokens.insert('%', pos);
                     pos++;
                 }
                 else {
-                    tokens.push_back(Token(TokenType::Invalid, string(1, current)));
+                    //invalid entry
+                    tokens.insert('I', pos);
                     pos++;
                 }
             }
-            tokens.push_back(Token(TokenType::End));
+            //end of input
+            tokens.insert('E', pos);
             return tokens;
         }
 
