@@ -10,6 +10,7 @@ private:
     BinaryNode *root;
     ErrorHandler errorH;
     double evaluateNode(BinaryNode *node);
+    void deleteTree(BinaryNode* node);
 
 public:
     Evaluator(Parser rootNode);

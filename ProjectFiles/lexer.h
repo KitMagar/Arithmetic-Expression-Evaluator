@@ -7,7 +7,7 @@ using namespace std;
 
 class Lexer {
     public:
-        explicit Lexer(const string& input) : input(input), pos(0) {}
+        explicit Lexer(const string& input);
         LinkedList tokenize();
 
     private:
