@@ -18,52 +18,49 @@ LinkedList Lexer::tokenize() {
         }
         else if (isdigit(current)) {
             string constant = parseConstant();
-            tokens.insert(stod(constant), pos);
-            pos++;
+            tokens.insert(stod(constant), tokens.getLength());
         }
         else if (current == '(') {
-            tokens.insert('(', pos);
+            tokens.insert('(', tokens.getLength());
             pos++;
         }
         else if (current == ')') {
-            tokens.insert(')', pos);
+            tokens.insert(')', tokens.getLength());
             pos++;
         }
         else if (current == '+') {
-            tokens.insert('+', pos);
+            tokens.insert('+', tokens.getLength());
             pos++;
         }
         else if (current == '-') {
-            tokens.insert('-', pos);
+            tokens.insert('-', tokens.getLength());
             pos++;
         }
         else if (current == '*') {
             if (input[pos+1] == '*' && pos+1 < input.length()) {
-                tokens.insert('^', pos);
+                tokens.insert('^', tokens.getLength());
                 pos++;
                 pos++;
             }
             else {
-                tokens.insert('*', pos);
+                tokens.insert('*', tokens.getLength());
                 pos++;
             }
         }
         else if (current == '/') {
-            tokens.insert('/', pos);
+            tokens.insert('/', tokens.getLength());
             pos++;
         }
         else if (current == '%') {
-            tokens.insert('%', pos);
+            tokens.insert('%', tokens.getLength());
             pos++;
         }
         else {
             //invalid entry
-            tokens.insert('I', pos);
+            tokens.insert('I', tokens.getLength());
             pos++;
         }
     }
-    //end of input
-    tokens.insert('E', pos);
     return tokens;
 }
 
