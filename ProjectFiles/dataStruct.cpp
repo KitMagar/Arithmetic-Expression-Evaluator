@@ -39,6 +39,7 @@ Node LinkedList::getEntry(int index){ //The way we interact with the returned no
 }
 
 void LinkedList::insert(char c,int index){ //used for characters
+    cout << "INSERTING CHAR " << c;
     Node *jumper = head;
     Node *insertVal = new Node(c);
     insertVal->next = nullptr;
@@ -69,11 +70,15 @@ void LinkedList::insert(char c,int index){ //used for characters
     }
 }
 
-void LinkedList::insert(double v,int index){ //USED For values
+//USED For values
+void LinkedList::insert(double v,int index){ 
+    cout << "INSERTING VALUE" << v;
+    cout << index;
     Node *jumper = head;
     Node *insertVal = new Node(v);
     insertVal->next = nullptr;
     if(index > length || index < 0){
+        cout << "IF ONE EXECUTED";
         throw out_of_range("Index out of bounds");
 
 
