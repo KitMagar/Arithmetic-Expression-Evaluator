@@ -42,7 +42,7 @@ void LinkedList::insert(char c,int index){ //used for characters
     Node *jumper = head;
     Node *insertVal = new Node(c);
     insertVal->next = nullptr;
-    if(index >= length || index < 0){
+    if(index > length || index < 0){
         throw out_of_range("Index out of bounds");
 
 
