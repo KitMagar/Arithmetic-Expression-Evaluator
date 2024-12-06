@@ -37,7 +37,7 @@ LinkedList Lexer::tokenize() {
             pos++;
         }
         else if (current == '*') {
-            if (input[pos+1] == '*' && pos+1 < input.length()) {
+            if (pos+1 < input.length() && input[pos+1] == '*') {
                 tokens.insert('^', tokens.getLength());
                 pos++;
                 pos++;
