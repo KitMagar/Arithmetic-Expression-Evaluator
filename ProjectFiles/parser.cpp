@@ -30,12 +30,18 @@ void Parser::rec_add(BinaryNode *curNode){
     }
 }
 BinaryNode* Parser::split(LinkedList list, int index){
+    cout << "MADE IT TO SPLIT INDEX: ";
+    cout << index << "\n";
     LinkedList leftList;
     LinkedList rightList;
     LinkedList center;
 
+    list.print();
     //fills center value
     center.insert(list.getEntry(index).entry.character, 0);
+    cout << "pass 1\n";
+    list.print();
+
 
     //fills center's lst
     for(int i=0; i<index;i++){
@@ -45,21 +51,33 @@ BinaryNode* Parser::split(LinkedList list, int index){
             leftList.insert(list.getEntry(i).entry.value, i);
         }
     }
-
+    cout << "pass 2\n";
     //fills center's rst
+    list.print();
     for(int i=0; i<list.getLength()-index-1;i++){
+        cout << i << "<" << list.getLength()-index-1 << "\n";
+        cout << index+i+1 << "\n";
+        cout << list.getLength();
         if(list.getEntry(index+i+1).isChar){
+            cout << "if true";
             rightList.insert(list.getEntry(index+i+1).entry.character,i);
         }else{
+            cout << "else true";
             rightList.insert(list.getEntry(index+i+1).entry.value, i);
         }
     }
+    cout << "pass 3\n";
 
     //creates a node with the value of center and respective trees
     BinaryNode *newNode = new BinaryNode();
+    newNode->left = new BinaryNode();
+    newNode->right = new BinaryNode();
     newNode->entry = center;
     newNode->left->entry=leftList;
     newNode->right->entry=rightList;
+    newNode->entry.print();
+    newNode->left->entry.print();
+    newNode->right->entry.print();
     return newNode;
 
 }
@@ -116,7 +134,7 @@ int Parser::lowPriority(LinkedList list){//expects a cleaned list, one with only
     return 0; //this is the case that there is only one item remaining in the list typically it comes from examples like 3*(4), first pass * is returned, then (4) is handled parenthesis are removed, then we only have 4 in the list now 
 
 }
-void Parser::clean(LinkedList list){
+void Parser::clean(LinkedList &list){
     //Explanation of goal: Check if the expression makes sytactical sense, as well as inserting in multiplication into the correct index of the list in cases where it is implied like (4+5)(9/3) or 6(7+9) also check for valid parenthesis (this can be achieved by doing something similar to parentDepth in lowPriority method) and then making sure there aren't any nonsensical expressions like 9+/9, the lexer guys will be giving us data in the form of a linked list in the form [6,+,-6] or [6,-,6]
     int parenthDepth = 0;
     bool lastWasOperator = false;
@@ -197,9 +215,14 @@ void Parser::rec_postOrder(BinaryNode *curNode){
     }
 }
 Parser::Parser(LinkedList entry){
+    cout << "Parser Creation\n";
     clean(entry);
+    cout << "Clean Executed\n";
     root = split(entry, lowPriority(entry));
+    cout << "root = split\n";
+    postOrderDisplay();
     rec_add(root);
+    cout << "creation complete\n";
 }
 void Parser::postOrderDisplay(){
     rec_postOrder(root);

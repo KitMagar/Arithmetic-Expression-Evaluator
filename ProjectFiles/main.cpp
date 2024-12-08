@@ -21,28 +21,18 @@ int main(){
         }
         string waitVar;
         Lexer lex(userInput);
-        cout << "Lex";
+        cout << "Lex\n";
         cin >> waitVar;
-        cout << "Input accepted";
+        cout << "Input accepted\n";
+
         LinkedList l = lex.tokenize();
 
             //DEBUG SECTION
-
-                        for(int i=0;i<l.getLength();i++){ //This will be used for debugging
-
-
-                            //This is how we handle if linked list has characters or numbers
-                            if(l.getEntry(i).isChar){ 
-                                cout << l.getEntry(i).entry.character << "C\n";
-                            }else{
-                                cout << l.getEntry(i).entry.value << "V\n";
-                            }
-                        }
-            //IF WE MAKE IT OUT OF THE LOOP TOKENIZER WORKS
+            l.print();
+            //IF WE MAKE IT OUT OF THE LOOP TOKENIZER WORKs
 
 
-
-        Parser parsed(lex.tokenize());
+        Parser parsed(l);
         cout << "Parse";
         cin >> waitVar;
         cout << "Input accepted";

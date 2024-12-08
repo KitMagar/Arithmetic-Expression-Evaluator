@@ -39,7 +39,6 @@ Node LinkedList::getEntry(int index){ //The way we interact with the returned no
 }
 
 void LinkedList::insert(char c,int index){ //used for characters
-    cout << "INSERTING CHAR " << c;
     Node *jumper = head;
     Node *insertVal = new Node(c);
     insertVal->next = nullptr;
@@ -64,21 +63,33 @@ void LinkedList::insert(char c,int index){ //used for characters
         length = length + 1;
 
     }else{//executed when we have items in the list, but are inserting at the beginning
+        insertVal->next = head;
         head = insertVal;
-        head->next = jumper;
         length = length + 1;
+    }
+}
+
+void LinkedList::print(){
+    Node *temp = head;
+    int index = 0;
+    while (temp != nullptr) {
+        cout << "Index " << index++ << ": ";
+        if (temp->isChar) {
+            cout << temp->entry.character;
+        } else {
+            cout << temp->entry.value;
+        }
+        cout << "\n";
+        temp = temp->next;
     }
 }
 
 //USED For values
 void LinkedList::insert(double v,int index){ 
-    cout << "INSERTING VALUE" << v;
-    cout << index;
     Node *jumper = head;
     Node *insertVal = new Node(v);
     insertVal->next = nullptr;
     if(index > length || index < 0){
-        cout << "IF ONE EXECUTED";
         throw out_of_range("Index out of bounds");
 
 
@@ -125,7 +136,10 @@ void LinkedList::remove(int index){
 
 LinkedList::~LinkedList(){ //iterates from the back and then deletes nodes from memory via remove function
     Node *current = head;
+    cout << "Destroying LinkedList: " << this << "\n";
+    print();
     while(current != nullptr){
+        cout << "Node deleted...";
         Node* nextnode = current->next;
         delete current;
         current = nextnode;

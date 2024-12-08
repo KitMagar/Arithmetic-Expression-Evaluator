@@ -15,7 +15,7 @@ class Parser{
         void rec_add(BinaryNode *curNode);
         BinaryNode* split(LinkedList list, int index);
         int lowPriority(LinkedList list);
-        void clean(LinkedList list);
+        void clean(LinkedList &list);
         void deleteTree(BinaryNode *curNode);
         void rec_postOrder(BinaryNode *curNode);
     public:

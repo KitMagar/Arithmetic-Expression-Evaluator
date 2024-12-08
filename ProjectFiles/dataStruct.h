@@ -26,6 +26,7 @@ public:
     void insert(char c, int index);
     void insert(double v, int index);
     void remove(int index);
+    void print();
 
 };
 
