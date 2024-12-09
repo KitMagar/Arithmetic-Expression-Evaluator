@@ -16,6 +16,7 @@ By post order the intention is to go as far down as possible, then once you have
 #include "parser.h"
 using namespace std;
 
+
 void Parser::rec_add(BinaryNode *curNode){
     if(curNode==nullptr){ //not quite sure if necessary, but it's a good to have for safety.
         return;
@@ -30,17 +31,14 @@ void Parser::rec_add(BinaryNode *curNode){
     }
 }
 BinaryNode* Parser::split(LinkedList list, int index){
-    cout << "MADE IT TO SPLIT INDEX: ";
-    cout << index << "\n";
     LinkedList leftList;
     LinkedList rightList;
     LinkedList center;
 
-    list.print();
     //fills center value
+    //cout << index;
+    //list.print();
     center.insert(list.getEntry(index).entry.character, 0);
-    cout << "pass 1\n";
-    list.print();
 
 
     //fills center's lst
@@ -51,43 +49,46 @@ BinaryNode* Parser::split(LinkedList list, int index){
             leftList.insert(list.getEntry(i).entry.value, i);
         }
     }
-    cout << "pass 2\n";
     //fills center's rst
-    list.print();
     for(int i=0; i<list.getLength()-index-1;i++){
-        cout << i << "<" << list.getLength()-index-1 << "\n";
-        cout << index+i+1 << "\n";
-        cout << list.getLength();
         if(list.getEntry(index+i+1).isChar){
-            cout << "if true";
             rightList.insert(list.getEntry(index+i+1).entry.character,i);
         }else{
-            cout << "else true";
             rightList.insert(list.getEntry(index+i+1).entry.value, i);
         }
     }
     cout << "pass 3\n";
-
     //creates a node with the value of center and respective trees
     BinaryNode *newNode = new BinaryNode();
     newNode->left = new BinaryNode();
     newNode->right = new BinaryNode();
+    
     newNode->entry = center;
     newNode->left->entry=leftList;
     newNode->right->entry=rightList;
-    newNode->entry.print();
-    newNode->left->entry.print();
-    newNode->right->entry.print();
+    /*cout << "center";
+    center.print();
+    cout << "left";
+    leftList.print();
+    cout << "right";
+    rightList.print();*/
     return newNode;
 
 }
-int Parser::lowPriority(LinkedList list){//expects a cleaned list, one with only a valid mathematical expression inside
+int Parser::lowPriority(LinkedList &list){//expects a cleaned list, one with only a valid mathematical expression inside
     //traverse through list right to left, only look for pluses/minus outside of parenthesis, then go right to left only looking for multi/div, then right to left only looking for exp. After this is done that must mean list expression is inside a set of parenthesis, do this all again but drop the exterior parenthesis
     int parenthDepth = 0;
     bool addSub = true;
     bool multDiv = false;
     bool exp = false;
     bool par = false;
+
+    if(list.getEntry(0).entry.character == '(' && list.getEntry(list.getLength()-1).entry.character == ')'){
+        //cout << "TRUE REMOVE";
+        list.remove(0);
+        list.remove(list.getLength()-1);
+    }
+
     while(list.getLength() >1){//either we escape by only being left with a number, or by returning.
         for(int j=0;j<4;j++){ //j<4 so we don't eliminate early, if j<3, we would switch case 2 but never acutally perform anything with the new case
             for(int i=list.getLength()-1; i>=0;i--){
@@ -103,11 +104,6 @@ int Parser::lowPriority(LinkedList list){//expects a cleaned list, one with only
                             return i;
                         }else if(exp && list.getEntry(i).entry.character == '^'){
                             return i;
-                        }else if(par && list.getEntry(0).entry.character == '(' && list.getEntry(list.getLength()-1).entry.character == ')'){
-                            list.remove(0);
-                            list.remove(list.getLength()-1);
-                            par = false;
-                            addSub = true;
                         }
                     }
                 }
@@ -138,8 +134,8 @@ void Parser::clean(LinkedList &list){
     //Explanation of goal: Check if the expression makes sytactical sense, as well as inserting in multiplication into the correct index of the list in cases where it is implied like (4+5)(9/3) or 6(7+9) also check for valid parenthesis (this can be achieved by doing something similar to parentDepth in lowPriority method) and then making sure there aren't any nonsensical expressions like 9+/9, the lexer guys will be giving us data in the form of a linked list in the form [6,+,-6] or [6,-,6]
     int parenthDepth = 0;
     bool lastWasOperator = false;
-    bool lastWasValue = false;
-    
+    //bool lastWasValue = false;
+    //9(3+7)
     for (int i = 0; i < list.getLength(); i++) {
         auto current = list.getEntry(i);
     
@@ -147,14 +143,14 @@ void Parser::clean(LinkedList &list){
         if (current.isChar && current.entry.character == '(') {
             parenthDepth++;
             lastWasOperator = true; // Opening parentheses acts as an implicit operator
-            lastWasValue = false;
+            //lastWasValue = false;
         } else if (current.isChar && current.entry.character == ')') {
             parenthDepth--;
             if (parenthDepth < 0) {
                 errorH.mismatchedParenthesesError();
             }
             lastWasOperator = false;
-            lastWasValue = true;
+            //lastWasValue = true;
         }
     
             // This will check for operators and their valid placements
@@ -163,14 +159,18 @@ void Parser::clean(LinkedList &list){
                 errorH.invalidOperatorSequenceError();
             }
             lastWasOperator = true;
-            lastWasValue = false;
+            //lastWasValue = false;
         } else if (!current.isChar) { 
-            if (lastWasValue) {
-                list.insert('*', i);
-                i++; 
+            if(i+1 < list.getLength()){
+                if (list.getEntry(i+1).isChar) {
+                    if(list.getEntry(i+1).entry.character == '('){
+                        list.insert('*', i+1);
+                        i++; 
+                    }
+                }
             }
             lastWasOperator = false;
-            lastWasValue = true;
+            //lastWasValue = true;
         }
 
 //  this handles implied multiplication after closing parentheses
@@ -181,7 +181,22 @@ void Parser::clean(LinkedList &list){
                 i++; // Skip over newly inserted operator
             }
         }
+
     }
+
+
+//used to destroy any single numbers surrounded by parentheses
+for(int i=0; i<list.getLength();i++){
+    if(i+2 < list.getLength()){
+        if(list.getEntry(i).isChar && list.getEntry(i+2).isChar){
+            if(list.getEntry(i).entry.character == '(' && list.getEntry(i+2).entry.character == ')'){
+                list.remove(i+2);
+                list.remove(i);
+            }
+        }
+    }
+}
+
 
 // Final check for mismatched parentheses
     if (parenthDepth != 0) {
@@ -204,9 +219,11 @@ void Parser::deleteTree(BinaryNode *curNode){
 }
 void Parser::rec_postOrder(BinaryNode *curNode){
     if(curNode->left != nullptr){
+        cout << "going left";
         rec_postOrder(curNode->left);
     }
     if(curNode->right != nullptr){
+        cout << "going right";
         rec_postOrder(curNode->right);
     }
     if(curNode->entry.getEntry(0).isChar){
@@ -219,10 +236,11 @@ Parser::Parser(LinkedList entry){
     cout << "Parser Creation\n";
     clean(entry);
     cout << "Clean Executed\n";
+    entry.print();
     root = split(entry, lowPriority(entry));
     cout << "root = split\n";
-    postOrderDisplay();
     rec_add(root);
+    postOrderDisplay();
     cout << "creation complete\n";
 }
 void Parser::postOrderDisplay(){

@@ -13,7 +13,7 @@ private:
     void deleteTree(BinaryNode* node);
 
 public:
-    Evaluator(Parser rootNode);
+    Evaluator(Parser &rootNode);
     double evaluate();
 	virtual ~Evaluator();
 };

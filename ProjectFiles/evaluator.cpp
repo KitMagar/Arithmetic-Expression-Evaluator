@@ -96,7 +96,7 @@ void Evaluator::deleteTree(BinaryNode* node) {
 
 // WHAT Y'ALL CAN LOOK AT 😀
 // PUBLIC CONSTRUCTOR METHOD
-Evaluator::Evaluator(Parser rootNode) : root(rootNode.root) {}
+Evaluator::Evaluator(Parser &rootNode) : root(rootNode.root) {}
 double Evaluator::evaluate() {
 	return evaluateNode(root);
 }

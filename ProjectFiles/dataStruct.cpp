@@ -136,10 +136,10 @@ void LinkedList::remove(int index){
 
 void LinkedList::Cleanup(){ //iterates from the back and then deletes nodes from memory via remove function
     Node *current = head;
-    cout << "Destroying LinkedList: " << this << "\n";
-    print();
+    //cout << "Destroying LinkedList: " << this << "\n";
+    //print();
     while(current != nullptr){
-        cout << "Node deleted...";
+        //cout << "Node deleted...";
         Node* nextnode = current->next;
         delete current;
         current = nextnode;
