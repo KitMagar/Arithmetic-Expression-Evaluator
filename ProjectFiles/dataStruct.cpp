@@ -134,7 +134,7 @@ void LinkedList::remove(int index){
     }
 }
 
-LinkedList::~LinkedList(){ //iterates from the back and then deletes nodes from memory via remove function
+void LinkedList::Cleanup(){ //iterates from the back and then deletes nodes from memory via remove function
     Node *current = head;
     cout << "Destroying LinkedList: " << this << "\n";
     print();

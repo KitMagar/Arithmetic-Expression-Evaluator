@@ -20,7 +20,7 @@ private:
     int length;
 public:
     LinkedList();
-    ~LinkedList();
+    void Cleanup();
     int getLength();
     Node getEntry(int index);
     void insert(char c, int index);

@@ -45,5 +45,6 @@ int main(){
         lex.~Lexer();
         parsed.~Parser();
         evaluated.~Evaluator();
+        l.Cleanup();
     }
 }

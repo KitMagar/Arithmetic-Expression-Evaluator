@@ -199,6 +199,7 @@ void Parser::deleteTree(BinaryNode *curNode){
     }
     deleteTree(curNode->left);
     deleteTree(curNode->right);
+    curNode->entry.Cleanup();
     delete curNode;
 }
 void Parser::rec_postOrder(BinaryNode *curNode){
