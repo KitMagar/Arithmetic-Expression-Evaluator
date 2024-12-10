@@ -15,7 +15,7 @@ weird observation: inputting an expression which does not crash after evaluation
 (maybe we should just secretly input one at the beginning and not display it lol)
 
 
-ERRORS are currently freezes
+Error Handler is called but the purpose is unclear.
 
 -Phoenix
 */
@@ -25,6 +25,11 @@ int main(){
     cout << "Welcome to the arithmetic Evaluator" << endl;
     cout << "When you're ready to quit type \"QUIT\"" << endl;
 
+    /*
+    This below is stupid, but I have no idea why, but the destructor for evaluator will cause a crash if we don't use this (I can't figure out a pattern) expression on the first use.
+
+    But after we evluate this once, it works perfectly fine from then on with no more crashing. If we can figure out why that would be great.
+    */
     //1+9(7+3)
     LinkedList startExp;
     startExp.insert(1.0, 0); startExp.insert('+', 1); startExp.insert(9.0, 2); startExp.insert('(', 3); startExp.insert(7.0, 4); startExp.insert('+', 5); startExp.insert(3.0, 6); startExp.insert(')', 7);
