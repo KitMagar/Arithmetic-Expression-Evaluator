@@ -9,16 +9,13 @@ using namespace std;
 /*
 CURRENT ISSUES:
 
-DECIMAL INPUT AND '^' FOR THE EXPONENT IS CURRENTLY UNSUPPORTED (ALSO QUESTION, ARE WE SUPPORTING MODULUS (%)?)
-
-SOMETIMES AFTER EVALUATION WE CRASH
-
-INPUTTING THINGS AGAIN SIMPLY DOES NOT WORK SOMETIMES
+CANNOT DO OPERATION 1+-5 (negative acceptance, should we ignore?)
 
 weird observation: inputting an expression which does not crash after evaluation, allows all expressions thereafter to be properly evaluated
 (maybe we should just secretly input one at the beginning and not display it lol)
 
-And the destructors are commented out currently because I think they were causing me some issues, not quite sure?
+
+ERRORS are currently freezes
 
 -Phoenix
 */
@@ -27,6 +24,14 @@ int main(){
     string userInput;
     cout << "Welcome to the arithmetic Evaluator" << endl;
     cout << "When you're ready to quit type \"QUIT\"" << endl;
+
+    //1+9(7+3)
+    LinkedList startExp;
+    startExp.insert(1.0, 0); startExp.insert('+', 1); startExp.insert(9.0, 2); startExp.insert('(', 3); startExp.insert(7.0, 4); startExp.insert('+', 5); startExp.insert(3.0, 6); startExp.insert(')', 7);
+    Parser p(startExp);
+    Evaluator e(p);
+    e.evaluate();
+    startExp.Cleanup();
     while(!quit){
         cout << "What is your input: ";
         cin >> userInput;
@@ -36,25 +41,49 @@ int main(){
             break;
         }
         Lexer lex(userInput);
+        //cout << "tokenizing";
         LinkedList l = lex.tokenize();
-        l.print();
+        //cout << "tokenized";
+        //l.print();
+        
 
-        if(l.getLength()>1){
-            Parser parsed(l);
-            Evaluator evaluated(parsed);
-            cout << evaluated.evaluate() << "\n";
-        }else if(!l.getEntry(0).isChar){
-            cout << l.getEntry(0).entry.value << "\n";
+        bool invalid = false;
+
+        for(int i=0; i<l.getLength();i++){
+            if(l.getEntry(i).isChar){
+                if(l.getEntry(i).entry.character == 'I'){
+                    invalid = true;
+                    break;
+                }
+            }
+        }
+        
+        if(!invalid){
+            if(!l.getEntry(0).isChar && l.getLength()==1){
+                cout << l.getEntry(0).entry.value << "\n";
+
+            }else if(l.getLength()==3 && l.getEntry(0).entry.character == '(' && l.getEntry(l.getLength()-1).entry.character == ')'){
+                l.remove(0);
+                l.remove(l.getLength()-1);
+                cout << l.getEntry(0).entry.value << "\n";
+            }else if(l.getLength()>1){
+                try{
+                    Parser parsed(l);
+                    Evaluator evaluated(parsed);
+                    cout << evaluated.evaluate() << "\n";
+                }
+                catch(...){
+                    cout << "That is not a valid expression\n";
+                }
+
+            }
         }else{
-            cout << l.getEntry(0).entry.character << " Is not a valid expression\n";
+            cout << "That is not a valid expression\n";
         }
 
         // 💣🔥💥
         //Currently commented out 
-        /*lex.~Lexer();
-        parsed.~Parser();
-        evaluated.~Evaluator();
-        l.Cleanup();*/
+        l.Cleanup();
         
     }
 }

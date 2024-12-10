@@ -16,7 +16,7 @@ LinkedList Lexer::tokenize() {
             pos++;
             continue;
         }
-        else if (isdigit(current)) {
+        else if (isdigit(current) || current == '.') {
             string constant = parseConstant();
             tokens.insert(stod(constant), tokens.getLength());
         }
@@ -47,6 +47,10 @@ LinkedList Lexer::tokenize() {
                 pos++;
             }
         }
+        else if(current == '^'){
+            tokens.insert('^', tokens.getLength());
+            pos++;
+        }
         else if (current == '/') {
             tokens.insert('/', tokens.getLength());
             pos++;
@@ -66,7 +70,7 @@ LinkedList Lexer::tokenize() {
 
 string Lexer::parseConstant() {
     int start = pos;
-    while (pos < input.length() && isdigit(input[pos])) {
+    while (pos < input.length() && (isdigit(input[pos]) || input[pos] == '.')) {
         pos++;
     }
     return input.substr(start, pos - start);

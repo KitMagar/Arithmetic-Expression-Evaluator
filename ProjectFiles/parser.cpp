@@ -57,7 +57,7 @@ BinaryNode* Parser::split(LinkedList list, int index){
             rightList.insert(list.getEntry(index+i+1).entry.value, i);
         }
     }
-    cout << "pass 3\n";
+    //cout << "pass 3\n";
     //creates a node with the value of center and respective trees
     BinaryNode *newNode = new BinaryNode();
     newNode->left = new BinaryNode();
@@ -100,7 +100,7 @@ int Parser::lowPriority(LinkedList &list){//expects a cleaned list, one with onl
                     }else if(parenthDepth == 0){
                         if(addSub && (list.getEntry(i).entry.character == '+' || list.getEntry(i).entry.character == '-')){
                             return i;
-                        }else if(multDiv &&((list.getEntry(i).entry.character == '*' || list.getEntry(i).entry.character == '/'))){
+                        }else if(multDiv &&((list.getEntry(i).entry.character == '*' || list.getEntry(i).entry.character == '/' || list.getEntry(i).entry.character == '%'))){
                             return i;
                         }else if(exp && list.getEntry(i).entry.character == '^'){
                             return i;
@@ -148,6 +148,7 @@ void Parser::clean(LinkedList &list){
             parenthDepth--;
             if (parenthDepth < 0) {
                 errorH.mismatchedParenthesesError();
+                throw runtime_error("mismatched parentheses");
             }
             lastWasOperator = false;
             //lastWasValue = true;
@@ -157,6 +158,7 @@ void Parser::clean(LinkedList &list){
         if (current.isChar && (current.entry.character == '+' || current.entry.character == '-' || current.entry.character == '*' || current.entry.character == '/' || current.entry.character == '^')) {
             if (lastWasOperator) {
                 errorH.invalidOperatorSequenceError();
+                throw runtime_error("invalid operator sequence");
             }
             lastWasOperator = true;
             //lastWasValue = false;
@@ -201,11 +203,13 @@ for(int i=0; i<list.getLength();i++){
 // Final check for mismatched parentheses
     if (parenthDepth != 0) {
         errorH.mismatchedParenthesesError();
+        throw runtime_error("mismatched parentheses");
     }
 
     // this will check for invalid ending 
     if (lastWasOperator) {
         errorH.invalidOperatorSequenceError();
+        throw runtime_error("invalid operator sequence");
     }
 }
 void Parser::deleteTree(BinaryNode *curNode){
@@ -219,11 +223,11 @@ void Parser::deleteTree(BinaryNode *curNode){
 }
 void Parser::rec_postOrder(BinaryNode *curNode){
     if(curNode->left != nullptr){
-        cout << "going left";
+        //cout << "going left";
         rec_postOrder(curNode->left);
     }
     if(curNode->right != nullptr){
-        cout << "going right";
+        //cout << "going right";
         rec_postOrder(curNode->right);
     }
     if(curNode->entry.getEntry(0).isChar){
@@ -233,15 +237,15 @@ void Parser::rec_postOrder(BinaryNode *curNode){
     }
 }
 Parser::Parser(LinkedList entry){
-    cout << "Parser Creation\n";
+    //cout << "Parser Creation\n";
     clean(entry);
-    cout << "Clean Executed\n";
-    entry.print();
+    //cout << "Clean Executed\n";
+    //entry.print();
     root = split(entry, lowPriority(entry));
-    cout << "root = split\n";
+    //cout << "root = split\n";
     rec_add(root);
-    postOrderDisplay();
-    cout << "creation complete\n";
+    //postOrderDisplay();
+    //cout << "creation complete\n";
 }
 void Parser::postOrderDisplay(){
     rec_postOrder(root);

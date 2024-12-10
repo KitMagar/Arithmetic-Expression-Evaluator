@@ -88,7 +88,7 @@ double Evaluator::evaluateNode(BinaryNode *node) {
 // DECONSTRUCTOR
 void Evaluator::deleteTree(BinaryNode* node) {
 	if (node!= nullptr) {
-		deleteTree(node-> left);
+		deleteTree(node->left);
 		deleteTree(node->right);
 		delete node;
 	}
