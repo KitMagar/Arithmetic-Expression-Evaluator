@@ -57,7 +57,7 @@ BinaryNode* Parser::split(LinkedList list, int index){
             rightList.insert(list.getEntry(index+i+1).entry.value, i);
         }
     }
-    //cout << "pass 3\n";
+    cout << "pass 3\n";
     //creates a node with the value of center and respective trees
     BinaryNode *newNode = new BinaryNode();
     newNode->left = new BinaryNode();
@@ -66,12 +66,12 @@ BinaryNode* Parser::split(LinkedList list, int index){
     newNode->entry = center;
     newNode->left->entry=leftList;
     newNode->right->entry=rightList;
-    /*cout << "center";
+    cout << "center";
     center.print();
     cout << "left";
     leftList.print();
     cout << "right";
-    rightList.print();*/
+    rightList.print();
     return newNode;
 
 }
@@ -83,13 +83,13 @@ int Parser::lowPriority(LinkedList &list){//expects a cleaned list, one with onl
     bool exp = false;
     bool par = false;
 
-    if(list.getEntry(0).entry.character == '(' && list.getEntry(list.getLength()-1).entry.character == ')'){
-        //cout << "TRUE REMOVE";
-        list.remove(0);
-        list.remove(list.getLength()-1);
-    }
-
     while(list.getLength() >1){//either we escape by only being left with a number, or by returning.
+        if(list.getEntry(0).entry.character == '(' && list.getEntry(list.getLength()-1).entry.character == ')'){
+            cout << "TRUE REMOVE";
+            list.remove(0);
+            list.remove(list.getLength()-1);
+            list.print(); cout << "printedList";
+        }
         for(int j=0;j<4;j++){ //j<4 so we don't eliminate early, if j<3, we would switch case 2 but never acutally perform anything with the new case
             for(int i=list.getLength()-1; i>=0;i--){
                 if(list.getEntry(i).isChar){

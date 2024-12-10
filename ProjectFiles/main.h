@@ -2,5 +2,6 @@
 #define MAIN_H
 
 int main();
+void evalCall(string userInput);
 
 #endif
