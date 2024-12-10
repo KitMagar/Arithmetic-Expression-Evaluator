@@ -91,7 +91,7 @@ int main(){
     startExp.Cleanup();
     while(!quit){
         cout << "What is your input: ";
-        cin >> userInput;
+        getline(cin, userInput);
         cout << endl;
         
         if(userInput == "QUIT"){
