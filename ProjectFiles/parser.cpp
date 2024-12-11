@@ -40,7 +40,6 @@ BinaryNode* Parser::split(LinkedList list, int index){
     //list.print();
     center.insert(list.getEntry(index).entry.character, 0);
 
-
     //fills center's lst
     for(int i=0; i<index;i++){
         if(list.getEntry(i).isChar){
@@ -49,12 +48,30 @@ BinaryNode* Parser::split(LinkedList list, int index){
             leftList.insert(list.getEntry(i).entry.value, i);
         }
     }
+    //should remove areas of parentheses around a constant
+    if(leftList.getLength()==3){
+        if(leftList.getEntry(0).isChar && leftList.getEntry(2).isChar){
+            if(leftList.getEntry(0).entry.character == '(' && leftList.getEntry(2).entry.character == ')'){
+                leftList.remove(2);
+                leftList.remove(0);
+            }
+        }
+    }
     //fills center's rst
     for(int i=0; i<list.getLength()-index-1;i++){
         if(list.getEntry(index+i+1).isChar){
             rightList.insert(list.getEntry(index+i+1).entry.character,i);
         }else{
             rightList.insert(list.getEntry(index+i+1).entry.value, i);
+        }
+    }
+    //should remove areas of parentheses around a constant
+    if(rightList.getLength()==3){
+        if(rightList.getEntry(0).isChar && rightList.getEntry(2).isChar){
+            if(rightList.getEntry(0).entry.character == '(' && rightList.getEntry(2).entry.character == ')'){
+                rightList.remove(2);
+                rightList.remove(0);
+            }
         }
     }
     //cout << "pass 3\n";

@@ -103,7 +103,6 @@ int main(){
 
 
         //passed [1-10], failed 11, 12, 13, 14, 15
-        /*
         evalCall("3+4"); //1
         cin >> userInput;
         evalCall("8-(5-2)"); //2
@@ -123,7 +122,6 @@ int main(){
         evalCall("(((((5-3)))*(((2+1)))+((2*3))))"); //9
         cin >> userInput;
         evalCall("((9+6))/((3*1)/(((2+2)))-1)"); //10
-        */
         cin >> userInput;
         evalCall("+(-2)*(-3)-((-4)/(+5))"); //11
         cin >> userInput;
