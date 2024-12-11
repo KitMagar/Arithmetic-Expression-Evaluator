@@ -104,6 +104,8 @@ int Parser::lowPriority(LinkedList &list){//expects a cleaned list, one with onl
         int parenthDepth = 0;
         int startIndex = -1;
         int endIndex = -1;
+
+        //this block is used to remove unecessary beginning and end parentheses
         for(int i=0; i<list.getLength(); i++){
             if(list.getEntry(i).isChar){
                 if(list.getEntry(i).entry.character == '('){
@@ -167,7 +169,7 @@ int Parser::lowPriority(LinkedList &list){//expects a cleaned list, one with onl
 
             }
         }
-        rec_paren(list);
+        rec_paren(list); //this call removes unnecessary parentheses for sub-expressions
     }
     return 0; //this is the case that there is only one item remaining in the list typically it comes from examples like 3*(4), first pass * is returned, then (4) is handled parenthesis are removed, then we only have 4 in the list now 
 
@@ -247,6 +249,7 @@ LinkedList Parser::rec_paren(LinkedList &expression){
     int endIndex = -1;
     int depth = 0;
     LinkedList smallerExpression;
+    //find the start and end index of a sub expression
     for(int i=0; i<expression.getLength();i++){
         if(expression.getEntry(i).isChar){
             if(expression.getEntry(i).entry.character == '('){
@@ -263,9 +266,9 @@ LinkedList Parser::rec_paren(LinkedList &expression){
             }
         }
     }
-    if(startIndex == -1 || endIndex == -1){
+    if(startIndex == -1 || endIndex == -1){//if none are found
         return expression;
-    }else if(expression.getEntry(startIndex+1).entry.character == '(' && expression.getEntry(endIndex-1).entry.character == ')'){
+    }else if(expression.getEntry(startIndex+1).entry.character == '(' && expression.getEntry(endIndex-1).entry.character == ')'){//if it's just the end and beginning parentheses
         expression.remove(endIndex);
         expression.remove(startIndex);
         rec_paren(expression);
@@ -278,11 +281,10 @@ LinkedList Parser::rec_paren(LinkedList &expression){
                 smallerExpression.insert(expression.getEntry(startIndex+i+1).entry.value,i);
             }
         }
+        //look deeper, since we use the address the edits to remove uneccessary parentheses works.
         rec_paren(smallerExpression);
     }
 }
-//9*(((1+3))/2)
-//SI=2, EI=12
 
 void Parser::deleteTree(BinaryNode *curNode){
     if(curNode == nullptr){
