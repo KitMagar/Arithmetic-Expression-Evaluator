@@ -37,7 +37,7 @@ BinaryNode* Parser::split(LinkedList list, int index){
 
     //fills center value
     //cout << index;
-    list.print();
+    //list.print();
     center.insert(list.getEntry(index).entry.character, 0);
 
 
@@ -57,7 +57,7 @@ BinaryNode* Parser::split(LinkedList list, int index){
             rightList.insert(list.getEntry(index+i+1).entry.value, i);
         }
     }
-    cout << "pass 3\n";
+    //cout << "pass 3\n";
     //creates a node with the value of center and respective trees
     BinaryNode *newNode = new BinaryNode();
     newNode->left = new BinaryNode();
@@ -66,12 +66,13 @@ BinaryNode* Parser::split(LinkedList list, int index){
     newNode->entry = center;
     newNode->left->entry=leftList;
     newNode->right->entry=rightList;
+    /*
     cout << "center";
     center.print();
     cout << "left";
     leftList.print();
     cout << "right";
-    rightList.print();
+    rightList.print();*/
     return newNode;
 
 }
@@ -90,7 +91,6 @@ int Parser::lowPriority(LinkedList &list){//expects a cleaned list, one with onl
             if(list.getEntry(i).isChar){
                 if(list.getEntry(i).entry.character == '('){
                     if(parenthDepth==0){
-                        cout << "ASSIGN TRUE";
                         startIndex = i;
                     }
                     parenthDepth++;
@@ -103,15 +103,15 @@ int Parser::lowPriority(LinkedList &list){//expects a cleaned list, one with onl
                 }
             }
         }
-        list.print();
-        cin >> c;
+        //list.print();
+        //cin >> c;
         if(startIndex == 0 && endIndex == list.getLength()-1){
-            cout << "TRUE REMOVE";
+            //cout << "TRUE REMOVE";
             list.remove(list.getLength()-1);
             list.remove(0);
-            list.print(); cout << "printedList";
+            //list.print(); cout << "printedList";
         }
-        cout << parenthDepth << addSub << multDiv << exp << par <<"\n";
+        //cout << parenthDepth << addSub << multDiv << exp << par <<"\n";
         for(int j=0;j<4;j++){ //j<4 so we don't eliminate early, if j<3, we would switch case 2 but never acutally perform anything with the new case
             for(int i=list.getLength()-1; i>=0;i--){
                 if(list.getEntry(i).isChar){
@@ -224,8 +224,8 @@ void Parser::clean(LinkedList &list){
 }
 //used to destroy any single numbers surrounded by parentheses
 LinkedList Parser::rec_paren(LinkedList &expression){
-    cout << "rec+_paren";
-    expression.print();
+    //cout << "rec_paren";
+    //expression.print();
     int startIndex = -1;
     int endIndex = -1;
     int depth = 0;
@@ -294,8 +294,8 @@ void Parser::rec_postOrder(BinaryNode *curNode){
 Parser::Parser(LinkedList entry){
     //cout << "Parser Creation\n";
     clean(entry);
-    cout << "Clean Executed\n";
-    entry.print();
+    //cout << "Clean Executed\n";
+    //entry.print();
     root = split(entry, lowPriority(entry));
     //cout << "root = split\n";
     rec_add(root);
