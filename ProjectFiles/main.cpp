@@ -65,7 +65,7 @@ void evalCall(string userInput){
 
         // 💣🔥💥
         //Currently commented out 
-        l.Cleanup();
+        //l.Cleanup();
         
 }
 
@@ -83,12 +83,13 @@ int main(){
     But after we evluate this once, it works perfectly fine from then on with no more crashing. If we can figure out why that would be great.
     */
     //1+9(7+3)
+    /*
     LinkedList startExp;
     startExp.insert(1.0, 0); startExp.insert('+', 1); startExp.insert(9.0, 2); startExp.insert('(', 3); startExp.insert(7.0, 4); startExp.insert('+', 5); startExp.insert(3.0, 6); startExp.insert(')', 7);
     Parser p(startExp);
     Evaluator e(p);
     e.evaluate();
-    startExp.Cleanup();
+    startExp.Cleanup();*/
     while(!quit){
         cout << "What is your input: ";
         getline(cin, userInput);
@@ -96,38 +97,43 @@ int main(){
         
         if(userInput == "QUIT"){
             break;
-        }
+        }/*else{
+            evalCall(userInput);
+        }*/
+
+
+        //passed [1-10], failed 11, 12, 13, 14, 15
         /*
-        evalCall("3+4");
+        evalCall("3+4"); //1
         cin >> userInput;
-        evalCall("8-(5-2)");
+        evalCall("8-(5-2)"); //2
         cin >> userInput;
-        evalCall("10*2/5");
+        evalCall("10*2/5"); //3
         cin >> userInput;
-        evalCall("2**3");
+        evalCall("2**3"); //4
         cin >> userInput;
-        evalCall("4*(3+2)%7-1");
+        evalCall("4*(3+2)%7-1"); //5
         cin >> userInput;
-        evalCall("(((2+3)))+(((1+2)))");
+        evalCall("(((2+3)))+(((1+2)))"); //6
         cin >> userInput;
-        evalCall("((5*2)-((3/1)+((4%3))))");
+        evalCall("((5*2)-((3/1)+((4%3))))"); //7
         cin >> userInput;
+        evalCall("(((2**(1+1))+((3-1)**2))/((4/2)%3))"); //8
+        cin >> userInput;
+        evalCall("(((((5-3)))*(((2+1)))+((2*3))))"); //9
+        cin >> userInput;
+        evalCall("((9+6))/((3*1)/(((2+2)))-1)"); //10
         */
-        evalCall("(((2**(1+1))+((3-1)**2))/((4/2)%3))");
         cin >> userInput;
-        evalCall("(((((5-3)))*(((2+1)))+((2*3))))");
+        evalCall("+(-2)*(-3)-((-4)/(+5))"); //11
         cin >> userInput;
-        evalCall("((9+6))/((3*1)/(((2+2)))-1)");
+        evalCall("-(+1)+(+2)"); //12
         cin >> userInput;
-        evalCall("+(-2)*(-3)-((-4)/(+5))");
+        evalCall("-(-(-3))+(-4)+(+5)"); //13
         cin >> userInput;
-        evalCall("-(+1)+(+2)");
+        evalCall("+2**(-3)"); //14
         cin >> userInput;
-        evalCall("-(-(-3))+(-4)+(+5)");
-        cin >> userInput;
-        evalCall("+2**(-3)");
-        cin >> userInput;
-        evalCall("-(+2)*(+3)-(-4)/(-5)");
+        evalCall("-(+2)*(+3)-(-4)/(-5)"); //15
         cin >> userInput;
     }
 }
