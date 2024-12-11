@@ -243,10 +243,13 @@ void Parser::clean(LinkedList &list){
 }
 //used to destroy any single numbers surrounded by parentheses
 LinkedList Parser::rec_paren(LinkedList &expression){
+    //cout << "rec_paren";
+    //expression.print();
     int startIndex = -1;
     int endIndex = -1;
     int depth = 0;
     LinkedList smallerExpression;
+    //find the start and end index of a sub expression
     for(int i=0; i<expression.getLength();i++){
         if(expression.getEntry(i).isChar){
             if(expression.getEntry(i).entry.character == '('){
@@ -254,34 +257,34 @@ LinkedList Parser::rec_paren(LinkedList &expression){
                     startIndex = i;
                 }
                 depth++;
-            } else if (expression.getEntry(i).entry.character == ')') {
+            }else if(expression.getEntry(i).entry.character == ')'){
                 depth--;
-                if (depth == 0) {
+                if(depth == 0){
                     endIndex = i;
                     break;
                 }
             }
         }
     }
-    if(startIndex == -1 || endIndex == -1){
+    if(startIndex == -1 || endIndex == -1){//if none are found
         return expression;
-    }else if(expression.getEntry(startIndex+1).entry.character == '(' && expression.getEntry(endIndex-1).entry.character == ')'){
+    }else if(expression.getEntry(startIndex+1).entry.character == '(' && expression.getEntry(endIndex-1).entry.character == ')'){//if it's just the end and beginning parentheses
         expression.remove(endIndex);
         expression.remove(startIndex);
-        return rec_paren(expression);
-    } else {
-        for (int i = 0; i < endIndex - startIndex - 1; i++) {
-            if (expression.getEntry(startIndex + i + 1).isChar) {
-                smallerExpression.insert(expression.getEntry(startIndex + i + 1).entry.character, i);
-            } else {
-                smallerExpression.insert(expression.getEntry(startIndex + i + 1).entry.value, i);
+        rec_paren(expression);
+    }else{
+        for(int i=0;i<endIndex-startIndex-1;i++){
+            //fill list with all values after start index and before end index
+            if(expression.getEntry(startIndex+i+1).isChar){
+                smallerExpression.insert(expression.getEntry(startIndex+i+1).entry.character,i);
+            }else{
+                smallerExpression.insert(expression.getEntry(startIndex+i+1).entry.value,i);
             }
         }
+        //look deeper, since we use the address the edits to remove uneccessary parentheses works.
         rec_paren(smallerExpression);
     }
 }
-//9*(((1+3))/2)
-//SI=2, EI=12
 
 void Parser::deleteTree(BinaryNode *curNode){
     if(curNode == nullptr){
