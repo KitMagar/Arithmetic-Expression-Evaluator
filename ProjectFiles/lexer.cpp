@@ -5,12 +5,15 @@
 #include "lexer.h"
 
 using namespace std;
-Lexer::Lexer(const string& input) : input(input), pos(0) {}
+
+// Change pos to size_t to match input.length(), which is unsigned.
+Lexer::Lexer(const string& input) : input(input), pos(0) {} 
+
 LinkedList Lexer::tokenize() {
     LinkedList tokens;
     double neg = -1;
 
-    while (pos < input.length()) {
+    while (pos < input.length()) { // No changes needed here; pos is now size_t.
         char current = input[pos];
 
         if (isspace(current)) {
@@ -35,7 +38,7 @@ LinkedList Lexer::tokenize() {
                 continue;
             }
             else {
-                if (input[pos-1] == '(') {
+                if (input[pos - 1] == '(') {
                     pos++;
                     continue;
                 }
@@ -47,24 +50,24 @@ LinkedList Lexer::tokenize() {
         }
         else if (current == '-') {
             if (pos == 0) {
-                if (pos+1 < input.length() && isdigit(input[pos+1])) {
+                if (pos + 1 < input.length() && isdigit(input[pos + 1])) {
                     pos++;
                     string constant = parseConstant();
-                    tokens.insert(stod(constant)*(-1), tokens.getLength());
+                    tokens.insert(stod(constant) * (-1), tokens.getLength());
                 }
-                else if (pos+1 < input.length() && input[pos+1] == '(') {
+                else if (pos + 1 < input.length() && input[pos + 1] == '(') {
                     tokens.insert(neg, tokens.getLength());
                     tokens.insert('*', tokens.getLength());
                     pos++;
                 }
             }
             else {
-                if (pos+1 < input.length() && isdigit(input[pos+1]) && input[pos-1] == '(' && input[pos+1] != '(') {
+                if (pos + 1 < input.length() && isdigit(input[pos + 1]) && input[pos - 1] == '(' && input[pos + 1] != '(') {
                     pos++;
                     string constant = parseConstant();
-                    tokens.insert(stod(constant)*(-1), tokens.getLength());
+                    tokens.insert(stod(constant) * (-1), tokens.getLength());
                 }
-                else if (pos+1 < input.length() && input[pos-1] == '(' && input[pos+1] == '(') {
+                else if (pos + 1 < input.length() && input[pos - 1] == '(' && input[pos + 1] == '(') {
                     tokens.insert(neg, tokens.getLength());
                     tokens.insert('*', tokens.getLength());
                     pos++;
@@ -76,7 +79,7 @@ LinkedList Lexer::tokenize() {
             }
         }
         else if (current == '*') {
-            if (pos+1 < input.length() && input[pos+1] == '*') {
+            if (pos + 1 < input.length() && input[pos + 1] == '*') {
                 tokens.insert('^', tokens.getLength());
                 pos++;
                 pos++;
@@ -99,7 +102,7 @@ LinkedList Lexer::tokenize() {
             pos++;
         }
         else {
-            //invalid entry
+            // invalid entry
             tokens.insert('I', tokens.getLength());
             pos++;
         }
@@ -108,9 +111,9 @@ LinkedList Lexer::tokenize() {
 }
 
 string Lexer::parseConstant() {
-    int start = pos;
+    size_t start = pos; // Change start to size_t for consistency with pos.
     while (pos < input.length() && (isdigit(input[pos]) || input[pos] == '.')) {
         pos++;
     }
-    return input.substr(start, pos - start);
+    return input.substr(start, pos - start); // No changes needed here.
 }

@@ -241,46 +241,48 @@ void Parser::clean(LinkedList &list){
 }
 //used to destroy any single numbers surrounded by parentheses
 LinkedList Parser::rec_paren(LinkedList &expression){
-    //cout << "rec_paren";
-    //expression.print();
     int startIndex = -1;
     int endIndex = -1;
     int depth = 0;
     LinkedList smallerExpression;
-    for(int i=0; i<expression.getLength();i++){
-        if(expression.getEntry(i).isChar){
-            if(expression.getEntry(i).entry.character == '('){
-                if(depth == 0){
+
+    for (int i = 0; i < expression.getLength(); i++) {
+        if (expression.getEntry(i).isChar) {
+            if (expression.getEntry(i).entry.character == '(') {
+                if (depth == 0) {
                     startIndex = i;
                 }
                 depth++;
-            }else if(expression.getEntry(i).entry.character == ')'){
+            } else if (expression.getEntry(i).entry.character == ')') {
                 depth--;
-                if(depth == 0){
+                if (depth == 0) {
                     endIndex = i;
                     break;
                 }
             }
         }
     }
-    if(startIndex == -1 || endIndex == -1){
+
+    if (startIndex == -1 || endIndex == -1) {
         return expression;
-    }else if(expression.getEntry(startIndex+1).entry.character == '(' && expression.getEntry(endIndex-1).entry.character == ')'){
+    }
+
+    if (expression.getEntry(startIndex + 1).entry.character == '(' && expression.getEntry(endIndex - 1).entry.character == ')') {
         expression.remove(endIndex);
         expression.remove(startIndex);
-        rec_paren(expression);
-    }else{
-        for(int i=0;i<endIndex-startIndex-1;i++){
-            //fill list with all values after start index and before end index
-            if(expression.getEntry(startIndex+i+1).isChar){
-                smallerExpression.insert(expression.getEntry(startIndex+i+1).entry.character,i);
-            }else{
-                smallerExpression.insert(expression.getEntry(startIndex+i+1).entry.value,i);
+        return rec_paren(expression);
+    } else {
+        for (int i = 0; i < endIndex - startIndex - 1; i++) {
+            if (expression.getEntry(startIndex + i + 1).isChar) {
+                smallerExpression.insert(expression.getEntry(startIndex + i + 1).entry.character, i);
+            } else {
+                smallerExpression.insert(expression.getEntry(startIndex + i + 1).entry.value, i);
             }
         }
-        rec_paren(smallerExpression);
+        return rec_paren(smallerExpression);
     }
 }
+
 //9*(((1+3))/2)
 //SI=2, EI=12
 
