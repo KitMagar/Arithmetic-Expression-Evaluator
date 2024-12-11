@@ -97,6 +97,7 @@ int main(){
         if(userInput == "QUIT"){
             break;
         }
+        /*
         evalCall("3+4");
         cin >> userInput;
         evalCall("8-(5-2)");
@@ -109,8 +110,9 @@ int main(){
         cin >> userInput;
         evalCall("(((2+3)))+(((1+2)))");
         cin >> userInput;
-        evalCall("((2*2)-((3/1)+((4%3))))");
+        evalCall("((5*2)-((3/1)+((4%3))))");
         cin >> userInput;
+        */
         evalCall("(((2**(1+1))+((3-1)**2))/((4/2)%3))");
         cin >> userInput;
         evalCall("(((((5-3)))*(((2+1)))+((2*3))))");

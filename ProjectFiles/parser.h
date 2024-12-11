@@ -18,6 +18,7 @@ class Parser{
         void clean(LinkedList &list);
         void deleteTree(BinaryNode *curNode);
         void rec_postOrder(BinaryNode *curNode);
+        LinkedList rec_paren(LinkedList &expression);
     public:
         BinaryNode *root;
         Parser(LinkedList entry);

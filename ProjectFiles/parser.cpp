@@ -14,8 +14,8 @@ By post order the intention is to go as far down as possible, then once you have
 #include <stdexcept>
 #include <iostream>
 #include "parser.h"
+#include <string>
 using namespace std;
-
 
 void Parser::rec_add(BinaryNode *curNode){
     if(curNode==nullptr){ //not quite sure if necessary, but it's a good to have for safety.
@@ -37,7 +37,7 @@ BinaryNode* Parser::split(LinkedList list, int index){
 
     //fills center value
     //cout << index;
-    //list.print();
+    list.print();
     center.insert(list.getEntry(index).entry.character, 0);
 
 
@@ -77,19 +77,41 @@ BinaryNode* Parser::split(LinkedList list, int index){
 }
 int Parser::lowPriority(LinkedList &list){//expects a cleaned list, one with only a valid mathematical expression inside
     //traverse through list right to left, only look for pluses/minus outside of parenthesis, then go right to left only looking for multi/div, then right to left only looking for exp. After this is done that must mean list expression is inside a set of parenthesis, do this all again but drop the exterior parenthesis
-    int parenthDepth = 0;
     bool addSub = true;
     bool multDiv = false;
     bool exp = false;
     bool par = false;
-
+    string c;
     while(list.getLength() >1){//either we escape by only being left with a number, or by returning.
-        if(list.getEntry(0).entry.character == '(' && list.getEntry(list.getLength()-1).entry.character == ')'){
+        int parenthDepth = 0;
+        int startIndex = -1;
+        int endIndex = -1;
+        for(int i=0; i<list.getLength(); i++){
+            if(list.getEntry(i).isChar){
+                if(list.getEntry(i).entry.character == '('){
+                    if(parenthDepth==0){
+                        cout << "ASSIGN TRUE";
+                        startIndex = i;
+                    }
+                    parenthDepth++;
+                }else if(list.getEntry(i).entry.character == ')'){
+                    parenthDepth--;
+                    if(parenthDepth==0){
+                        endIndex=i;
+                        break;
+                    }
+                }
+            }
+        }
+        list.print();
+        cin >> c;
+        if(startIndex == 0 && endIndex == list.getLength()-1){
             cout << "TRUE REMOVE";
-            list.remove(0);
             list.remove(list.getLength()-1);
+            list.remove(0);
             list.print(); cout << "printedList";
         }
+        cout << parenthDepth << addSub << multDiv << exp << par <<"\n";
         for(int j=0;j<4;j++){ //j<4 so we don't eliminate early, if j<3, we would switch case 2 but never acutally perform anything with the new case
             for(int i=list.getLength()-1; i>=0;i--){
                 if(list.getEntry(i).isChar){
@@ -122,10 +144,13 @@ int Parser::lowPriority(LinkedList &list){//expects a cleaned list, one with onl
                 par = true;
                 break;
             default:
+                addSub=true;
+                par=false;
                 break;
 
             }
         }
+        rec_paren(list);
     }
     return 0; //this is the case that there is only one item remaining in the list typically it comes from examples like 3*(4), first pass * is returned, then (4) is handled parenthesis are removed, then we only have 4 in the list now 
 
@@ -185,22 +210,7 @@ void Parser::clean(LinkedList &list){
         }
 
     }
-
-
-//used to destroy any single numbers surrounded by parentheses
-for(int i=0; i<list.getLength();i++){
-    if(i+2 < list.getLength()){
-        if(list.getEntry(i).isChar && list.getEntry(i+2).isChar){
-            if(list.getEntry(i).entry.character == '(' && list.getEntry(i+2).entry.character == ')'){
-                list.remove(i+2);
-                list.remove(i);
-            }
-        }
-    }
-}
-
-
-// Final check for mismatched parentheses
+    // Final check for mismatched parentheses
     if (parenthDepth != 0) {
         errorH.mismatchedParenthesesError();
         throw runtime_error("mismatched parentheses");
@@ -212,6 +222,51 @@ for(int i=0; i<list.getLength();i++){
         throw runtime_error("invalid operator sequence");
     }
 }
+//used to destroy any single numbers surrounded by parentheses
+LinkedList Parser::rec_paren(LinkedList &expression){
+    cout << "rec+_paren";
+    expression.print();
+    int startIndex = -1;
+    int endIndex = -1;
+    int depth = 0;
+    LinkedList smallerExpression;
+    for(int i=0; i<expression.getLength();i++){
+        if(expression.getEntry(i).isChar){
+            if(expression.getEntry(i).entry.character == '('){
+                if(depth == 0){
+                    startIndex = i;
+                }
+                depth++;
+            }else if(expression.getEntry(i).entry.character == ')'){
+                depth--;
+                if(depth == 0){
+                    endIndex = i;
+                    break;
+                }
+            }
+        }
+    }
+    if(startIndex == -1 || endIndex == -1){
+        return expression;
+    }else if(expression.getEntry(startIndex+1).entry.character == '(' && expression.getEntry(endIndex-1).entry.character == ')'){
+        expression.remove(endIndex);
+        expression.remove(startIndex);
+        rec_paren(expression);
+    }else{
+        for(int i=0;i<endIndex-startIndex-1;i++){
+            //fill list with all values after start index and before end index
+            if(expression.getEntry(startIndex+i+1).isChar){
+                smallerExpression.insert(expression.getEntry(startIndex+i+1).entry.character,i);
+            }else{
+                smallerExpression.insert(expression.getEntry(startIndex+i+1).entry.value,i);
+            }
+        }
+        rec_paren(smallerExpression);
+    }
+}
+//9*(((1+3))/2)
+//SI=2, EI=12
+
 void Parser::deleteTree(BinaryNode *curNode){
     if(curNode == nullptr){
         return;
@@ -239,8 +294,8 @@ void Parser::rec_postOrder(BinaryNode *curNode){
 Parser::Parser(LinkedList entry){
     //cout << "Parser Creation\n";
     clean(entry);
-    //cout << "Clean Executed\n";
-    //entry.print();
+    cout << "Clean Executed\n";
+    entry.print();
     root = split(entry, lowPriority(entry));
     //cout << "root = split\n";
     rec_add(root);
