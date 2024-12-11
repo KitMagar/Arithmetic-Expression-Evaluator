@@ -27,7 +27,7 @@ void evalCall(string userInput){
         //cout << "tokenizing";
         LinkedList l = lex.tokenize();
         //cout << "tokenized";
-        l.print();
+        //l.print();
         
 
         bool invalid = false;
@@ -98,9 +98,9 @@ int main(){
         
         if(userInput == "QUIT"){
             break;
-        }/*else{
+        }else{
             evalCall(userInput);
-        }*/
+        }
 
 
         //passed all :)
@@ -137,6 +137,7 @@ int main(){
         cin >> userInput;*/
 
         //FOR THE INVALID EXPRESSION TESTS 2 and 8 CRASH, BUT ALL PROVIDE A GENERIC RESPONSE
+        /*
         evalCall("2*(4+3-1"); //1 
         cin >> userInput;
         evalCall("*5+2"); //2
@@ -157,6 +158,7 @@ int main(){
         cin >> userInput;
         evalCall("((7*3)^2)"); //10 (PASSES BECAUSE OF ADVANCED FEATURE)
         cin >> userInput;
+        */
     }
 }
 

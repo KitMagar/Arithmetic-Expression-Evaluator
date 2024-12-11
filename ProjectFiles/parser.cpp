@@ -318,7 +318,7 @@ void Parser::rec_postOrder(BinaryNode *curNode){
 Parser::Parser(LinkedList entry){
     //cout << "Parser Creation\n";
     clean(entry);
-    cout << "Clean Executed\n";
+    //cout << "Clean Executed\n";
     //entry.print();
     root = split(entry, lowPriority(entry));
     //cout << "root = split\n";
