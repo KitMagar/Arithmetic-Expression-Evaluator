@@ -103,6 +103,7 @@ double Evaluator::evaluate() {
 
 // PUBLIC DECONSTRUCTOR METHOD
 Evaluator::~Evaluator() {
-	deleteTree(root);
-	root = nullptr;
+	//deleteTree(root);
+	//root = nullptr;
+	;
 }
