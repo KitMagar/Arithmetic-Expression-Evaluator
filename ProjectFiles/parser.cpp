@@ -219,10 +219,12 @@ void Parser::clean(LinkedList &list){
             if (lastWasOperator || i==0) {
                 errorH.invalidOperatorSequenceError();
                 throw runtime_error("invalid operator sequence");
-            }else if(list.getEntry(i+1).isChar){
-                if(list.getEntry(i+1).entry.character == '+' || list.getEntry(i+1).entry.character == '-' || list.getEntry(i+1).entry.character == '*' || list.getEntry(i+1).entry.character == '/' || list.getEntry(i+1).entry.character == '^' || list.getEntry(i+1).entry.character == '%' || list.getEntry(i+1).entry.character == ')'){
-                    errorH.invalidOperatorSequenceError();
-                    throw runtime_error("invalid operator sequence");
+            }else if(i+1 < list.getLength()){
+                if(list.getEntry(i+1).isChar){
+                    if(list.getEntry(i+1).entry.character == '+' || list.getEntry(i+1).entry.character == '-' || list.getEntry(i+1).entry.character == '*' || list.getEntry(i+1).entry.character == '/' || list.getEntry(i+1).entry.character == '^' || list.getEntry(i+1).entry.character == '%' || list.getEntry(i+1).entry.character == ')'){
+                        errorH.invalidOperatorSequenceError();
+                        throw runtime_error("invalid operator sequence");
+                    }
                 }
             }
             lastWasOperator = true;
