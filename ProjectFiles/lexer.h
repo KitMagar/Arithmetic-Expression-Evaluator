@@ -2,13 +2,14 @@
 #define LEXER_H
 
 #include "dataStruct.h"
+#include "errorhandler.h"
 #include <string>
 using namespace std;
 
 class Lexer {
     public:
         explicit Lexer(const string& input);
-        LinkedList tokenize();
+        LinkedList tokenize(ErrorHandler &errorH);
 
     private:
         string input;

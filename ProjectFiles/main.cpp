@@ -47,7 +47,7 @@ void evalCall(string userInput) {
 
     Lexer lex(userInput);
     //cout << "tokenizing";
-    LinkedList l = lex.tokenize();
+    LinkedList l = lex.tokenize(errorHandler);
     //cout << "tokenized";
     //l.print();
 
@@ -81,7 +81,7 @@ void evalCall(string userInput) {
             }
         }
     } else {
-        cout << "That is not a valid expression\n";
+            errorHandler.displayErrors();
     }
 }
 

@@ -3,13 +3,14 @@
 #include <cctype>
 #include "dataStruct.h"
 #include "lexer.h"
+#include "errorhandler.h"
 
 using namespace std;
 
 // Change pos to size_t to match input.length(), which is unsigned.
 Lexer::Lexer(const string& input) : input(input), pos(0) {} 
 
-LinkedList Lexer::tokenize() {
+LinkedList Lexer::tokenize(ErrorHandler &errorH) {
     LinkedList tokens;
     double neg = -1;
 
@@ -104,6 +105,7 @@ LinkedList Lexer::tokenize() {
         else {
             // invalid entry
             tokens.insert('I', tokens.getLength());
+            errorH.invalidCharacterError(current, pos);
             pos++;
         }
     }
