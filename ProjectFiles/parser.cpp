@@ -34,12 +34,16 @@ BinaryNode* Parser::split(LinkedList list, int index){
     LinkedList leftList;
     LinkedList rightList;
     LinkedList center;
-
+    BinaryNode *newNode = new BinaryNode();
     //fills center value
     //cout << index;
     //list.print();
+    if(list.getLength() == 1){
+        center.insert(list.getEntry(index).entry.value, 0);
+        newNode->entry = center;
+        return newNode;
+    }
     center.insert(list.getEntry(index).entry.character, 0);
-
     //fills center's lst
     for(int i=0; i<index;i++){
         if(list.getEntry(i).isChar){
@@ -76,10 +80,9 @@ BinaryNode* Parser::split(LinkedList list, int index){
     }
     //cout << "pass 3\n";
     //creates a node with the value of center and respective trees
-    BinaryNode *newNode = new BinaryNode();
+
     newNode->left = new BinaryNode();
     newNode->right = new BinaryNode();
-    
     newNode->entry = center;
     newNode->left->entry=leftList;
     newNode->right->entry=rightList;
@@ -340,7 +343,9 @@ Parser::Parser(LinkedList entry){
     //entry.print();
     root = split(entry, lowPriority(entry));
     //cout << "root = split\n";
-    rec_add(root);
+    if(root->left != nullptr || root->right != nullptr){
+        rec_add(root);
+    }
     //postOrderDisplay();
     //cout << "creation complete\n";
 }
