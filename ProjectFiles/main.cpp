@@ -52,10 +52,11 @@ void evalCall(string userInput) {
     //l.print();
 
     // Validation of tokens
-    bool invalid = true;
+    bool invalid = false;
+    bool operatorOnly = true;
     for (int i = 0; i < l.getLength(); i++) {
         if(!l.getEntry(i).isChar){//this will deal with expressions which are ONLY operators
-            invalid = false;
+            operatorOnly = false;
         }
         if (l.getEntry(i).isChar && l.getEntry(i).entry.character == 'I') {
             invalid = true;
@@ -63,7 +64,7 @@ void evalCall(string userInput) {
         }
     }
 
-    if (!invalid) {
+    if (!invalid && !operatorOnly) {
         if (!l.getEntry(0).isChar && l.getLength() == 1) {
             cout << l.getEntry(0).entry.value << "\n";
         } else if (l.getLength() == 3 && l.getEntry(0).entry.character == '(' && l.getEntry(l.getLength() - 1).entry.character == ')') {
@@ -83,8 +84,11 @@ void evalCall(string userInput) {
                 errorHandler.displayErrors();
             }
         }
-    } else {
+    } else if(invalid && !operatorOnly){
             errorHandler.displayErrors();
+    }else{
+        errorHandler.invalidOperatorSequenceError();
+        errorHandler.displayErrors();
     }
 }
 
