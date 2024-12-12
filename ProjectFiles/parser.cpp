@@ -180,6 +180,34 @@ void Parser::clean(LinkedList &list){
     bool lastWasOperator = false;
     //bool lastWasValue = false;
     //9(3+7)
+    //removes isolated parentheses.
+    int startIndex = -1;
+    int endIndex = -1;
+    for(int i=0; i<list.getLength(); i++){
+        if(list.getEntry(i).isChar){
+            if(list.getEntry(i).entry.character == '('){
+                if(parenthDepth==0){
+                    startIndex = i;
+                }
+                parenthDepth++;
+            }else if(list.getEntry(i).entry.character == ')'){
+                parenthDepth--;
+                if(parenthDepth==0){
+                    endIndex=i;
+                    break;
+                }
+            }
+        }
+    }
+    if(startIndex+1 == endIndex){
+        list.remove(endIndex);
+        list.remove(startIndex);
+        clean(list);
+    }
+
+
+
+
     for (int i = 0; i < list.getLength(); i++) {
         auto current = list.getEntry(i);
     

@@ -23,6 +23,10 @@ int main() {
     while (!quit) {
         cout << "What is your input: ";
         getline(cin, userInput);
+        if(userInput == "\n"){
+            cout << "TRUE";
+            getline(cin, userInput);
+        }
         cout << endl;
 
         if (userInput == "QUIT") {
