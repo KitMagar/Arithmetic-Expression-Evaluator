@@ -89,10 +89,10 @@ LinkedList Lexer::tokenize() {
                 pos++;
             }
         }
-        else if(current == '^'){
+        /* else if(current == '^'){
             tokens.insert('^', tokens.getLength());
             pos++;
-        }
+        } */
         else if (current == '/') {
             tokens.insert('/', tokens.getLength());
             pos++;

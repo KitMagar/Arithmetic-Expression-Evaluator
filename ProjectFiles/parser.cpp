@@ -199,10 +199,15 @@ void Parser::clean(LinkedList &list){
         }
     
             // This will check for operators and their valid placements
-        if (current.isChar && (current.entry.character == '+' || current.entry.character == '-' || current.entry.character == '*' || current.entry.character == '/' || current.entry.character == '^')) {
-            if (lastWasOperator) {
+        if (current.isChar && (current.entry.character == '+' || current.entry.character == '-' || current.entry.character == '*' || current.entry.character == '/' || current.entry.character == '^' || current.entry.character == '%')) {
+            if (lastWasOperator || i==0) {
                 errorH.invalidOperatorSequenceError();
                 throw runtime_error("invalid operator sequence");
+            }else if(list.getEntry(i+1).isChar){
+                if(list.getEntry(i+1).entry.character == '+' || list.getEntry(i+1).entry.character == '-' || list.getEntry(i+1).entry.character == '*' || list.getEntry(i+1).entry.character == '/' || list.getEntry(i+1).entry.character == '^' || list.getEntry(i+1).entry.character == '%' || list.getEntry(i+1).entry.character == ')'){
+                    errorH.invalidOperatorSequenceError();
+                    throw runtime_error("invalid operator sequence");
+                }
             }
             lastWasOperator = true;
             //lastWasValue = false;
@@ -313,7 +318,7 @@ void Parser::rec_postOrder(BinaryNode *curNode){
 Parser::Parser(LinkedList entry){
     //cout << "Parser Creation\n";
     clean(entry);
-    cout << "Clean Executed\n";
+    //cout << "Clean Executed\n";
     //entry.print();
     root = split(entry, lowPriority(entry));
     //cout << "root = split\n";
