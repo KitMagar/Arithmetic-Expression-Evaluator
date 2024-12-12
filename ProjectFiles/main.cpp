@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 #include <stack>   // cpp container, data structure called stack access using push and pop 
-#include <cstring> // For isdigit(), strchr()
+#include <cstring> // For isdigit()
 #include "lexer.h"
 #include "parser.h"
 #include "evaluator.h"
@@ -81,6 +81,7 @@ bool checkOperatorOperandSequence(const string &input, ErrorHandler &errorHandle
 }
 
 // Evaluation function
+// Evaluation function
 void evalCall(string userInput) {
     ErrorHandler errorHandler;
 
@@ -92,27 +93,23 @@ void evalCall(string userInput) {
     }
 
     Lexer lex(userInput);
-        //cout << "tokenizing";
-        LinkedList l = lex.tokenize();
-        //cout << "tokenized";
-        l.print();
-        
+    //cout << "tokenizing";
+    LinkedList l = lex.tokenize();
+    //cout << "tokenized";
+    //l.print();
 
-        bool invalid = false;
-
-        for(int i=0; i<l.getLength();i++){
-            if(l.getEntry(i).isChar){
-                if(l.getEntry(i).entry.character == 'I'){
-                    invalid = true;
-                    break;
-                }
-            }
+    // Validation of tokens
+    bool invalid = false;
+    for (int i = 0; i < l.getLength(); i++) {
+        if (l.getEntry(i).isChar && l.getEntry(i).entry.character == 'I') {
+            invalid = true;
+            break;
         }
-        
-        if(!invalid){
-            if(!l.getEntry(0).isChar && l.getLength()==1){
-                cout << l.getEntry(0).entry.value << "\n";
+    }
 
+    if (!invalid) {
+        if (!l.getEntry(0).isChar && l.getLength() == 1) {
+            cout << l.getEntry(0).entry.value << "\n";
         } else if (l.getLength() == 3 && l.getEntry(0).entry.character == '(' && l.getEntry(l.getLength() - 1).entry.character == ')') {
             l.remove(0);
             l.remove(l.getLength() - 1);
@@ -152,14 +149,15 @@ int main() {
 
         if (userInput == "QUIT") {
             break;
-        }/*else{
+        } else {
             evalCall(userInput);
-        }*/
+        }
+    }
 
+    return 0;
+}
 
-        //passed all :)
-        /*
-        evalCall("3+4"); //1
+/*         evalCall("3+4"); //1
         cin >> userInput;
         evalCall("8-(5-2)"); //2
         cin >> userInput;
@@ -191,8 +189,8 @@ int main() {
         cin >> userInput;*/
 
         //FOR THE INVALID EXPRESSION TESTS 2 and 8 CRASH, BUT ALL PROVIDE A GENERIC RESPONSE
-        /*
-        evalCall("2*(4+3-1"); //1 
+        
+/*         evalCall("2*(4+3-1"); //1 
         cin >> userInput;
         evalCall("*5+2"); //2
         cin >> userInput;
@@ -212,107 +210,5 @@ int main() {
         cin >> userInput;
         evalCall("((7*3)^2)"); //10 (PASSES BECAUSE OF ADVANCED FEATURE)
         cin >> userInput;
-    }
-}
+      */
 
-/** First test cases using the error handler, division by zero is 
-the only one working right now, below code is what I would compile 
-but I kept the top alt + shift + a to comment out each section 
-program.exe is the compile with error handler */
-
-
-/* void evalCall(const string &userInput, ErrorHandler &errorHandler) {
-    try {
-        // Lexical Analysis
-        Lexer lex(userInput);
-        LinkedList l = lex.tokenize();
-        l.print(); // Display tokens for debugging
-
-        // Check for invalid tokens
-        for (int i = 0; i < l.getLength(); i++) {
-            if (l.getEntry(i).isChar && l.getEntry(i).entry.character == 'I') {
-                errorHandler.invalidCharacterError(l.getEntry(i).entry.character, i);
-                throw runtime_error("Invalid character in expression");
-            }
-        }
-
-        // Parse and Evaluate
-        if (!l.getEntry(0).isChar && l.getLength() == 1) {
-            cout << l.getEntry(0).entry.value << "\n";
-        } else {
-            Parser parsed(l);
-            Evaluator evaluated(parsed);
-            cout << evaluated.evaluate() << "\n";
-        }
-
-    } catch (const exception &e) {
-        errorHandler.logError(e.what());
-        cout << "Error: " << e.what() << "\n";
-    }
-}
-
-void runTestCases(ErrorHandler &errorHandler) {
-    struct TestCase {
-        string input;
-        string expectedResult;
-    };
-
-    TestCase testCases[] = {
-        {"3+4", "7"},
-        {"8-(5-2)", "5"},
-        {"10*2/5", "4"},
-        {"2**3", "8"},
-        {"4*(3+2)%7-1", "2"},
-        {"(((2+3)))+(((1+2)))", "8"},
-        {"((5*2)-((3/1)+((4%3))))", "7"},
-        {"(((2**(1+1))+((3-1)**2))/((4/2)%3))", "5"},
-        {"(((((5-3)))*(((2+1)))+((2*3))))", "11"},
-        {"((9+6))/((3*1)/(((2+2)))-1)", "15"},
-        {"4/0", "Error: Division by zero"},
-        {"(((3+4)-2)+(1)", "Error: Mismatched parentheses detected"},
-    };
-
-    for (const auto &testCase : testCases) {
-        cout << "Testing input: " << testCase.input << "\n";
-        errorHandler.clearErrors();
-        evalCall(testCase.input, errorHandler);
-
-        cout << "Errors:" << endl;
-        errorHandler.displayErrors();
-        cout << "\n";
-    }
-}
-
-int main() {
-    ErrorHandler errorHandler;
-    bool quit = false;
-    string userInput;
-
-    cout << "Welcome to the Arithmetic Evaluator" << endl;
-    cout << "Type \"QUIT\" to exit, or press Enter to run test cases." << endl;
-
-    while (!quit) {
-        cout << "What is your input: ";
-        getline(cin, userInput);
-
-        if (userInput.empty()) {
-            cout << "Running test cases...\n";
-            runTestCases(errorHandler);
-            break;
-        }
-
-        if (userInput == "QUIT") {
-            quit = true;
-            break;
-        }
-
-        evalCall(userInput, errorHandler);
-
-        cout << "Errors encountered:" << endl;
-        errorHandler.displayErrors();
-        cout << "\n";
-    }
-
-    return 0;
-}
- */
