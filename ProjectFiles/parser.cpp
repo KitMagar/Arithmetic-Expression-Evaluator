@@ -180,29 +180,17 @@ void Parser::clean(LinkedList &list){
     bool lastWasOperator = false;
     //bool lastWasValue = false;
     //9(3+7)
-    //removes isolated parentheses.
-    int startIndex = -1;
-    int endIndex = -1;
+    //removes isolated 90((()))+1 parentheses.
     for(int i=0; i<list.getLength(); i++){
-        if(list.getEntry(i).isChar){
-            if(list.getEntry(i).entry.character == '('){
-                if(parenthDepth==0){
-                    startIndex = i;
-                }
-                parenthDepth++;
-            }else if(list.getEntry(i).entry.character == ')'){
-                parenthDepth--;
-                if(parenthDepth==0){
-                    endIndex=i;
-                    break;
+        if(i+1<list.getLength()){
+            if(list.getEntry(i).isChar && list.getEntry(i+1).isChar){
+                if(list.getEntry(i).entry.character == '(' && list.getEntry(i+1).entry.character == ')'){
+                    list.remove(i+1);
+                    list.remove(i);
+                    clean(list);
                 }
             }
         }
-    }
-    if(startIndex+1 == endIndex){
-        list.remove(endIndex);
-        list.remove(startIndex);
-        clean(list);
     }
 
 
