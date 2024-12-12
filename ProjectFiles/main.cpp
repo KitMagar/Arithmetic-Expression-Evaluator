@@ -52,8 +52,11 @@ void evalCall(string userInput) {
     //l.print();
 
     // Validation of tokens
-    bool invalid = false;
+    bool invalid = true;
     for (int i = 0; i < l.getLength(); i++) {
+        if(!l.getEntry(i).isChar){//this will deal with expressions which are ONLY operators
+            invalid = false;
+        }
         if (l.getEntry(i).isChar && l.getEntry(i).entry.character == 'I') {
             invalid = true;
             break;
