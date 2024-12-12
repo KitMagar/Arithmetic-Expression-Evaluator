@@ -21,7 +21,7 @@ int main() {
     cout << "When you're ready to quit type \"QUIT\"" << endl;
 
     while (!quit) {
-        cout << "What is your input: ";
+        cout << "\nEnter Arithmetic Expression: ";
         getline(cin, userInput);
         if(userInput == ""){
             cout << "\nCannot do an evaluation with an empty expression\n";
