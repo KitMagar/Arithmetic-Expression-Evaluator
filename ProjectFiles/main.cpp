@@ -23,9 +23,9 @@ int main() {
     while (!quit) {
         cout << "What is your input: ";
         getline(cin, userInput);
-        if(userInput == "\n"){
-            cout << "TRUE";
-            getline(cin, userInput);
+        if(userInput == ""){
+            cout << "\nCannot do an evaluation with an empty expression\n";
+            continue;
         }
         cout << endl;
 
