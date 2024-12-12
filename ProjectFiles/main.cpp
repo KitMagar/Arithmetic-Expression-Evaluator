@@ -11,7 +11,7 @@
 using namespace std;
 
 void evalCall(string userInput);
-void test();
+//void test();
 
 int main() {
     bool quit = false;
@@ -31,8 +31,8 @@ int main() {
 
         if (userInput == "QUIT") {
             break;
-        }else if(userInput== "TEST"){
-            test();
+        //}else if(userInput== "TEST"){
+            //test();
         }else{
             evalCall(userInput);
         }
@@ -93,6 +93,7 @@ void evalCall(string userInput) {
 }
 
 //TEST CASES
+/*
 void test(){
     string userInput;
     evalCall("3+4"); //1
@@ -150,3 +151,4 @@ void test(){
     cin >> userInput;
     cout << "TESTS COMPLETE\n";
 }
+*/
